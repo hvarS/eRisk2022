@@ -4,3 +4,4 @@ __pycache__
 logs
 bert_model
 task1_data/*
+saved_models/*

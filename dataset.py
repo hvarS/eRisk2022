@@ -12,8 +12,10 @@ class PathologicalGamblingDataset(Dataset):
     def __init__(self,path):
         super(PathologicalGamblingDataset,self).__init__()
         self.path = path
-        trn_data,trn_cat=self.get_training_data()
-        return trn_data,trn_cat 
+        self.trn_data,self.trn_cat=self.get_training_data()
+    
+    def get_data(self):
+        return self.trn_data,self.trn_cat
 
     def get_training_data(self):
         print('\n ***** Reading Training Data ***** \n')

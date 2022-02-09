@@ -10,6 +10,7 @@ from gensim.models import LogEntropyModel
 from gensim.corpora import Dictionary
 from classifiers import classification_pipeline
 from gensim.models.doc2vec import Doc2Vec,TaggedDocument 
+from tqdm import tqdm
 
 
 path = os.getcwd()
@@ -62,7 +63,8 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
     print('\n ***** Building Entropy Based Training Model ***** \n')
     print('No of Selected Terms \t'+str(no_of_selected_features)) 
     trn_vec=[]; trn_docs=[]; 
-    for doc in trn_data:
+    print('Tokenizing training dataset ')
+    for doc in tqdm(trn_data):
         doc=nltk.word_tokenize(doc.lower())
         trn_docs.append(doc)                       # Training docs broken into words
     trn_dct = Dictionary(trn_docs)
@@ -92,11 +94,16 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
     clf= grid.best_estimator_
 
     model_path = os.path.join('saved_models','entropy_'+clf_opt)
-    flname=model_path+'entropy'+'_'+clf_opt+'_'+str(no_of_selected_features)
+    if not os.path.exists(model_path):
+        os.mkdir(model_path)
+    os.chdir(model_path)
+    flname='entropy'+'_'+clf_opt+'_'+str(no_of_selected_features)
     joblib.dump(clf, flname+'_clf.joblib')
     joblib.dump(trn_model, flname+'_model.joblib')
     joblib.dump(trn_dct, flname+'_dict.joblib')
     
+    os.chdir(path)
+
     return clf,ext2,trn_dct,trn_model
 
 
@@ -130,9 +137,14 @@ def doc2vec_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
     clf= grid.best_estimator_
 
     model_path = os.path.join('saved_models','doc2vec_'+clf_opt)
-    flname=model_path+'doc2vec'+'_'+clf_opt+'_'+str(no_of_selected_features)
+    if not os.path.exists(model_path):
+        os.mkdir(model_path)
+    os.chdir(model_path)
+    flname='doc2vec'+'_'+clf_opt+'_'+str(no_of_selected_features)
 
     joblib.dump(clf, flname+'_clf.joblib')
     joblib.dump(trn_model, flname+'_model.joblib')
-            
+    
+    os.chdir(path)
+
     return clf,ext2,trn_model
