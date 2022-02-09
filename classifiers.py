@@ -53,7 +53,7 @@ def classification_pipeline(opt = 'ab'):
     elif opt=='svm': 
         print('\n\t### Training Linear SVM Classifier ### \n')
         ext2='svm'
-        clf = svm.SVC(kernel='linear', class_weight='balanced',probability=True)  
+        clf = svm.SVC(kernel='linear', class_weight='balanced',probability=True,verbose=True)  
         clf_parameters = {
         'clf__C':(0.1,1,5,10,50,100),
         }

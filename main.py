@@ -2,7 +2,7 @@ from dataset import PathologicalGamblingDataset
 import os 
 from sklearn.model_selection._split import StratifiedKFold
 from models import ModelSelection 
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score,classification_report,confusion_matrix
 
 
 ############### Preparing Data ##################
@@ -10,7 +10,7 @@ dataset = PathologicalGamblingDataset(os.getcwd())
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 
-trn_data,trn_cat = trn_data[:100],trn_cat[:100]
+# trn_data,trn_cat = trn_data[:100],trn_cat[:100]
 
 ############### Choosing Model and Model Parameters ##################
 option = 'entropy'
@@ -43,4 +43,10 @@ for train_index, test_index in skf.split(trn_data,trn_cat):
 fm=f1_score(actual_class_labels, predicted_class_labels, average='macro') 
 print ('\n Macro Averaged F1-Score :'+str(fm))
 fm=f1_score(actual_class_labels, predicted_class_labels, average='micro') 
-print ('\n Mircro Averaged F1-Score:'+str(fm))
+print ('\n Micro Averaged F1-Score:'+str(fm))
+
+print(classification_report(actual_class_labels,predicted_class_labels))
+
+tn, fp, fn, tp = confusion_matrix(actual_class_labels, predicted_class_labels).ravel()
+specificity = tn / (tn+fp)
+print('\n Specifity Score :',str(specificity))

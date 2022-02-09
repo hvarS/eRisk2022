@@ -15,10 +15,10 @@ class ModelSelection(object):
         self.save = False
 
         self.check_path = os.path.join(os.getcwd(),'saved_models',model+'_'+clf_opt,model+'_'+clf_opt+'_'+str(num_features)+'_clf.joblib')
-        print(self.check_path)
         if not os.path.exists(self.check_path):
             self.save = True
-        print(self.save)
+        if not self.save:
+            print('Loading Pretrained ',model,' Model')
 
     def fit(self,x_train,y_train,x_valid):
         self.x_train,self.y_train,self.x_valid = x_train,y_train,x_valid
@@ -39,10 +39,9 @@ class ModelSelection(object):
             if self.save:
                 clf,_,trn_dct,trn_model=entropy_training_model(x_train,y_train,self.num_features,self.opt)
             else:
-                print('Loading Pretrained Entropy Model')
                 clf=joblib.load(self.check_path)
-                trn_dct=joblib.load(os.path.join(os.getcwd(),'saved_models',self.model+'_'+self.opt,'_'+str(self.num_features),'_dict.joblib'))
-                trn_model=joblib.load(os.path.join(os.getcwd(),'saved_models',self.model+'_'+self.opt,'_'+str(self.num_features),'_model.joblib'))
+                trn_dct=joblib.load(os.path.join(os.getcwd(),'saved_models',self.model+'_'+self.opt,self.model+'_'+self.opt+'_'+str(self.num_features)+'_dict.joblib'))
+                trn_model=joblib.load(os.path.join(os.getcwd(),'saved_models',self.model+'_'+self.opt,self.model+'_'+self.opt+'_'+str(self.num_features)+'_model.joblib'))
             
             print(' Tokenizing Validation Dataset')
             for doc in tqdm(x_valid):
