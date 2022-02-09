@@ -11,6 +11,7 @@ from gensim.corpora import Dictionary
 from classifiers import classification_pipeline
 from gensim.models.doc2vec import Doc2Vec,TaggedDocument 
 from tqdm import tqdm
+from sklearn.preprocessing import StandardScaler
 
 
 path = os.getcwd()
@@ -78,13 +79,14 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
         for elm in vector:
             vec[elm[0]]=elm[1]
         trn_vec.append(vec)
-# Classificiation and feature selection pipelines
+    
+    # Classificiation and feature selection pipelines
     clf,clf_parameters,ext2=classification_pipeline(clf_opt) 
     if no_of_selected_features==None:                                  # To use all the terms of the vocabulary
-        pipeline = Pipeline([('clf', clf),])    
+        pipeline = Pipeline([('scaler', StandardScaler()),('clf', clf),])    
     else:
         try: 
-            pipeline = Pipeline([('feature_selection', SelectKBest(chi2, k=no_of_selected_features)), 
+            pipeline = Pipeline([('feature_selection', SelectKBest(chi2, k=no_of_selected_features)), ('scaler', StandardScaler()),
                 ('clf', clf),])  
         except:                                  # If the input is wrong
             print('Wrong Input. Enter number of terms correctly. \n')

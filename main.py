@@ -10,7 +10,7 @@ dataset = PathologicalGamblingDataset(os.getcwd())
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 
-# trn_data,trn_cat = trn_data[:100],trn_cat[:100]
+trn_data,trn_cat = trn_data[:100],trn_cat[:100]
 
 ############### Choosing Model and Model Parameters ##################
 option = 'entropy'
