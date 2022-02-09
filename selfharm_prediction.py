@@ -58,7 +58,7 @@ class get_torch_data_format(torch.utils.data.Dataset):
 # Main Class
 
 class selfharm_prediction():
-    def __init__(self,path='/home/tanmay/erisk2021/',model='tfidf', model_path='saved_models/entropy_svm/', model_source='monologg/biobert_v1.1_pubmed',vec_len=20,clf_opt='s',no_of_selected_features=None, output_file='output.json'):
+    def __init__(self,path='/home/tanmay/erisk2021/',model='entropy', model_path='saved_models/entropy_svm/', model_source='monologg/biobert_v1.1_pubmed',vec_len=20,clf_opt='s',no_of_selected_features=None, output_file='output.json'):
         self.path = path
         self.model = model
         self.model_path=model_path
