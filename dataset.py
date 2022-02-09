@@ -9,10 +9,11 @@ task1_loc = 'task1_data'
 task1_training_loc = 't1_training/TRAINING_DATA/2021_cases'
 
 class PathologicalGamblingDataset(Dataset):
-    def __init__(self,path) -> None:
+    def __init__(self,path):
         super(PathologicalGamblingDataset,self).__init__()
         self.path = path
-        trn_data,trn_cat=self.get_training_data() 
+        trn_data,trn_cat=self.get_training_data()
+        return trn_data,trn_cat 
 
     def get_training_data(self):
         print('\n ***** Reading Training Data ***** \n')
@@ -67,4 +68,3 @@ class PathologicalGamblingDataset(Dataset):
         return trn_data, trn_cat
 
 
-dataset = PathologicalGamblingDataset(os.getcwd())

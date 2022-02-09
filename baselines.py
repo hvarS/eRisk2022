@@ -9,6 +9,8 @@ import nltk
 from gensim.models import LogEntropyModel
 from gensim.corpora import Dictionary
 from classifiers import classification_pipeline
+from gensim.models.doc2vec import Doc2Vec,TaggedDocument 
+
 
 path = os.getcwd()
 
@@ -17,7 +19,7 @@ if not os.path.exists(os.path.join(path,'saved_models')):
 
 
 # TFIDF model    
-def tfidf_training_model(self,trn_data,trn_cat,no_of_selected_features = None,clf_opt = 'ab'):
+def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt = 'ab'):
     print('\n ***** Building TFIDF Based Training Model ***** \n')         
     clf,clf_parameters,ext2=classification_pipeline(clf_opt) 
     if no_of_selected_features==None:                                  # To use all the terms of the vocabulary
@@ -97,10 +99,9 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
     
     return clf,ext2,trn_dct,trn_model
 
-from gensim.models.doc2vec import Doc2Vec,TaggedDocument 
 
 # Doc2Vec model    
-def doc2vec_training_model(self,trn_data,trn_cat,no_of_selected_features = 1000,clf_opt = 'ab'):
+def doc2vec_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_opt = 'ab'):
     print('\n ***** Building Doc2Vec Based Training Model ***** \n')
     print('No of Features \t'+str(no_of_selected_features)) 
     tagged_data = [TaggedDocument(words=nltk.word_tokenize(_d.lower()), tags=[str(i)]) for i, _d in enumerate(trn_data)]
@@ -130,7 +131,7 @@ def doc2vec_training_model(self,trn_data,trn_cat,no_of_selected_features = 1000,
 
     model_path = os.path.join('saved_models','doc2vec_'+clf_opt)
     flname=model_path+'doc2vec'+'_'+clf_opt+'_'+str(no_of_selected_features)
-    
+
     joblib.dump(clf, flname+'_clf.joblib')
     joblib.dump(trn_model, flname+'_model.joblib')
             
