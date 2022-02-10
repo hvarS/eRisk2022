@@ -63,8 +63,13 @@ def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt
     print(f'Time Taken to Fit GridSearch : {end-start}')
 
     model_path = os.path.join('saved_models','tfidf_'+clf_opt)
+    if not os.path.exists(model_path):
+        os.mkdir(model_path)
+    os.chdir(model_path)
     flname='tfidf'+'_'+clf_opt+'_'+str(no_of_selected_features)
-    joblib.dump(clf, os.path.join(model_path,flname+'_clf.joblib')) 
+    joblib.dump(clf, flname+'_clf.joblib') 
+    os.chdir(path)
+    
     return clf,ext2
 
 
@@ -102,7 +107,7 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
         except:                                  # If the input is wrong
             print('Wrong Input. Enter number of terms correctly. \n')
             sys.exit()
-    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,n_jobs=-1) 
+    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,verbose = -1,n_jobs=-1) 
     start = time.time()
     grid.fit(trn_vec,trn_cat)     
     end = time.time()
