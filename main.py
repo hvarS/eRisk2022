@@ -14,9 +14,9 @@ trn_data,trn_cat= dataset.get_data()
 # trn_data,trn_cat = trn_data[:105],trn_cat[:105]
 
 ############### Choosing Model and Model Parameters ##################
-option = 'entropy'
+option = 'tfidf'
 clf_opt = 'svm'
-num_features = 7000
+num_features = 1000
 model = ModelSelection(option,clf_opt,num_features)
 
 ############### KFold Cross Validation ##########
