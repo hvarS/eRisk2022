@@ -2,20 +2,21 @@ from dataset import PathologicalGamblingDataset
 import os 
 from sklearn.model_selection._split import StratifiedKFold
 from models import ModelSelection 
-from sklearn.metrics import f1_score,classification_report,confusion_matrix
+from sklearn.metrics import classification_report,confusion_matrix
 from collections import Counter
+import numpy as np
 
 ############### Preparing Data ##################
 dataset = PathologicalGamblingDataset(os.getcwd())
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 
-# trn_data,trn_cat = trn_data[:50],trn_cat[:50]
+# trn_data,trn_cat = trn_data[:105],trn_cat[:105]
 
 ############### Choosing Model and Model Parameters ##################
 option = 'entropy'
 clf_opt = 'svm'
-num_features = 200
+num_features = 7000
 model = ModelSelection(option,clf_opt,num_features)
 
 ############### KFold Cross Validation ##########
@@ -34,7 +35,7 @@ for train_index, test_index in skf.split(trn_data,trn_cat):
     print('\n')                
     print('CV Level '+str(count))
     predicted,predicted_probability= model.fit(X_train,y_train,X_test)
-    confidence_score.append(predicted_probability)
+    confidence_score.append(np.array(predicted_probability))
     for item in y_test:
         actual_class_labels.append(item)
     for item in predicted:
@@ -48,5 +49,9 @@ print(classification_report(actual_class_labels,predicted_class_labels))
 tn, fp, fn, tp = confusion_matrix(actual_class_labels, predicted_class_labels).ravel()
 specificity = tn / (tn+fp)
 print('\n Specifity Score :',str(specificity))
+
+confidence_score = np.array(confidence_score)
+confidence_score = np.concatenate(confidence_score)
+print(sum(confidence_score))    # It would be size of [array/10,2]
 print ('The Probablity of Confidence of the Classifier: \t'+str(sum(confidence_score)/len(confidence_score))+'\n')
 
