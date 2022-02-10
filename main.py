@@ -12,12 +12,12 @@ dataset = PathologicalGamblingDataset(os.getcwd())
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 
-# trn_data,trn_cat = trn_data[:105],trn_cat[:105]
+trn_data,trn_cat = trn_data[:100],trn_cat[:100]
 
 ############### Choosing Model and Model Parameters ##################
 option = 'tfidf'
 clf_opt = 'svm'
-num_features = 1000
+num_features = 200
 model = ModelSelection(option,clf_opt,num_features)
 
 ############### KFold Cross Validation ##########

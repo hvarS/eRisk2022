@@ -12,7 +12,14 @@ from classifiers import classification_pipeline
 from gensim.models.doc2vec import Doc2Vec,TaggedDocument 
 from tqdm import tqdm
 from sklearn.preprocessing import StandardScaler
+from nltk.corpus import stopwords
+import time 
 
+en_stopwords = ['a', 'about', 'above', 'across', 'after', 'again', 'against', 'all', 'almost', 'alone', 'along', 'already', 'also', 'although', 'always', 'among', 'an', 'and', 'another', 'any', 'anybody', 'anyone', 'anything', 'anywhere', 'are', 'area', 'areas', 'around', 'as', 'ask', 'asked', 'asking', 'asks', 'at', 'away', 'b', 'back', 'backed', 'backing', 'backs', 'be', 'became', 'because', 'become', 'becomes', 'been', 'before', 'began', 'behind', 'being', 'beings', 'best', 'better', 'between', 'big', 'both', 'but', 'by', 'c', 'came', 'can', 'cannot', 'case', 'cases', 'certain', 'certainly', 'clear', 'clearly', 'come', 'could', 'd', 'did', 'differ', 'different', 'differently', 'do', 'does', 'done', 'down', 'down', 'downed', 'downing', 'downs', 'during', 'e', 'each', 'early', 'either', 'end', 'ended', 'ending', 'ends', 'enough', 'even', 'evenly', 'ever', 'every', 'everybody', 'everyone', 'everything', 'everywhere', 'f', 'face', 'faces', 'fact', 'facts', 'far', 'felt', 'few', 'find', 'finds', 'first', 'for', 'four', 'from', 'full', 'fully', 'further', 'furthered', 'furthering', 'furthers', 'g', 'gave', 'general', 'generally', 'get', 'gets', 'give', 'given', 'gives', 'go', 'going', 'good', 'goods', 'got', 'great', 'greater', 'greatest', 'group', 'grouped', 'grouping', 'groups', 'h', 'had', 'has', 'have', 'having', 'he', 'her', 'here', 'herself', 'high', 'high', 'high', 'higher', 'highest', 'him', 'himself', 'his', 'how', 'however', 'i', 'if', 'important', 'in', 'interest', 'interested', 'interesting', 'interests', 'into', 'is', 'it', 'its', 'itself', 'j', 'just', 'k', 'keep', 'keeps', 'kind', 'knew', 'know', 'known', 'knows', 'l', 'large', 'largely', 'last', 'later', 'latest', 'least', 'less', 'let', 'lets', 'like', 'likely', 'long', 'longer', 'longest', 'm', 'made', 'make', 'making', 'man', 'many', 'may', 'me', 'member', 'members', 'men', 'might', 'more', 'most', 'mostly', 'mr', 'mrs', 'much', 'must', 'my', 'myself', 'n', 'necessary', 'need', 'needed', 'needing', 'needs', 'never', 'new', 'new', 'newer', 'newest', 'next', 'no', 'nobody', 'non', 'noone', 'not', 'nothing', 'now', 'nowhere', 'number', 'numbers', 'o', 'of', 'off', 'often', 'old', 'older', 'oldest', 'on', 'once', 'one', 'only', 'open', 'opened', 'opening', 'opens', 'or', 'order', 'ordered', 'ordering', 'orders', 'other', 'others', 'our', 'out', 'over', 'p', 'part', 'parted', 'parting', 'parts', 'per', 'perhaps', 'place', 'places', 'point', 'pointed', 'pointing', 'points', 'possible', 'present', 'presented', 'presenting', 'presents', 'problem', 'problems', 'put', 'puts', 'q', 'quite', 'r', 'rather', 'really', 'right', 'right', 'room', 'rooms', 's', 'said', 'same', 'saw', 'say', 'says', 'second', 'seconds', 'see', 'seem', 'seemed', 'seeming', 'seems', 'sees', 'several', 'shall', 'she', 'should', 'show', 'showed', 'showing', 'shows', 'side', 'sides', 'since', 'small', 'smaller', 'smallest', 'so', 'some', 'somebody', 'someone', 'something', 'somewhere', 'state', 'states', 'still', 'still', 'such', 'sure', 't', 'take', 'taken', 'than', 'that', 'the', 'their', 'them', 'then', 'there', 'therefore', 'these', 'they', 'thing', 'things', 'think', 'thinks', 'this', 'those', 'though', 'thought', 'thoughts', 'three', 'through', 'thus', 'to', 'today', 'together', 'too', 'took', 'toward', 'turn', 'turned', 'turning', 'turns', 'two', 'u', 'under', 'until', 'up', 'upon', 'us', 'use', 'used', 'uses', 'v', 'very', 'w', 'want', 'wanted', 'wanting', 'wants', 'was', 'way', 'ways', 'we', 'well', 'wells', 'went', 'were', 'what', 'when', 'where', 'whether', 'which', 'while', 'who', 'whole', 'whose', 'why', 'will', 'with', 'within', 'without', 'work', 'worked', 'working', 'works', 'would', 'x', 'y', 'year', 'years', 'yet', 'you', 'young', 'younger', 'youngest', 'your', 'yours', 'z']
+nltk_stopwords=list(set(stopwords.words('english')))
+for word in nltk_stopwords:
+    if word not in en_stopwords:
+        en_stopwords.append(word)
 
 path = os.getcwd()
 
@@ -48,13 +55,16 @@ def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt
     'vect__ngram_range': ((1, 2),(1,3)),  # Unigrams, Bigrams or Trigrams
     }
     parameters={**feature_parameters,**clf_parameters} 
-    grid = GridSearchCV(pipeline,parameters,scoring='f1_micro',cv=10,verbose=2)          
+    grid = GridSearchCV(pipeline,parameters,scoring='f1_micro',cv=10,verbose=2,n_jobs=-1)          
+    start = time.time()
     grid.fit(trn_data,trn_cat)     
+    end = time.time()
     clf= grid.best_estimator_  
+    print(f'Time Taken to Fit GridSearch : {end-start}')
 
     model_path = os.path.join('saved_models','tfidf_'+clf_opt)
-    flname=model_path+'tfidf'+'_'+clf_opt+'_'+str(no_of_selected_features)
-    joblib.dump(clf, flname+'_clf.joblib') 
+    flname='tfidf'+'_'+clf_opt+'_'+str(no_of_selected_features)
+    joblib.dump(clf, os.path.join(model_path,flname+'_clf.joblib')) 
     return clf,ext2
 
 
@@ -67,6 +77,7 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
     print('Tokenizing training dataset ')
     for doc in tqdm(trn_data):
         doc=nltk.word_tokenize(doc.lower())
+        doc = [word for word in doc if word not in en_stopwords]
         trn_docs.append(doc)                       # Training docs broken into words
     trn_dct = Dictionary(trn_docs)
     corpus = [trn_dct.doc2bow(row) for row in trn_docs]
@@ -91,9 +102,12 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
         except:                                  # If the input is wrong
             print('Wrong Input. Enter number of terms correctly. \n')
             sys.exit()
-    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10) 
+    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,n_jobs=-1) 
+    start = time.time()
     grid.fit(trn_vec,trn_cat)     
+    end = time.time()
     clf= grid.best_estimator_
+    print(f'Time Taken to Fit GridSearch : {end-start}')
 
     model_path = os.path.join('saved_models','entropy_'+clf_opt)
     if not os.path.exists(model_path):
