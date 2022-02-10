@@ -5,6 +5,7 @@ from models import ModelSelection
 from sklearn.metrics import classification_report,confusion_matrix
 from collections import Counter
 import numpy as np
+import statistics
 
 ############### Preparing Data ##################
 dataset = PathologicalGamblingDataset(os.getcwd())
@@ -22,7 +23,7 @@ model = ModelSelection(option,clf_opt,num_features)
 ############### KFold Cross Validation ##########
 skf = StratifiedKFold(n_splits=10)
 
-predicted_class_labels=[]; actual_class_labels=[]; count=0; confidence_score = []
+predicted_class_labels=[]; actual_class_labels=[]; count=0; probs=[];
 for train_index, test_index in skf.split(trn_data,trn_cat):
     X_train=[]; y_train=[]; X_test=[]; y_test=[]
     for item in train_index:
@@ -35,7 +36,8 @@ for train_index, test_index in skf.split(trn_data,trn_cat):
     print('\n')                
     print('CV Level '+str(count))
     predicted,predicted_probability= model.fit(X_train,y_train,X_test)
-    confidence_score.append(np.array(predicted_probability))
+    for item in predicted_probability:
+        probs.append(float(max(item)))
     for item in y_test:
         actual_class_labels.append(item)
     for item in predicted:
@@ -43,15 +45,15 @@ for train_index, test_index in skf.split(trn_data,trn_cat):
 
 #   Evaluation 
 class_names = list(Counter(actual_class_labels).keys())
+class_names = [str(x) for x in class_names]
 
 
-print(classification_report(actual_class_labels,predicted_class_labels))
+print(classification_report(actual_class_labels,predicted_class_labels,target_names=class_names))
 tn, fp, fn, tp = confusion_matrix(actual_class_labels, predicted_class_labels).ravel()
 specificity = tn / (tn+fp)
 print('\n Specifity Score :',str(specificity))
 
-confidence_score = np.array(confidence_score)
-confidence_score = np.concatenate(confidence_score)
-print(sum(confidence_score))    # It would be size of [array/10,2]
-print ('The Probablity of Confidence of the Classifier: \t'+str(sum(confidence_score)/len(confidence_score))+'\n')
+confidence_score=statistics.mean(probs)-statistics.variance(probs)
+confidence_score=round(confidence_score, 3)
+print ('\n The Probablity of Confidence of the Classifier: \t'+str(confidence_score)+'\n')    
 
