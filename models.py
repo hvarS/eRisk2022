@@ -1,5 +1,3 @@
-
-from sqlalchemy import false
 from baselines import tfidf_training_model,doc2vec_training_model,entropy_training_model
 import os
 import joblib
