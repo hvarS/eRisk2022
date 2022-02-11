@@ -15,9 +15,9 @@ trn_data,trn_cat= dataset.get_data()
 # trn_data,trn_cat = trn_data[:1000],trn_cat[:1000]
 
 ############### Choosing Model and Model Parameters ##################
-option = 'doc2vec'
+option = 'entropy'
 clf_opt = 'svm'
-num_features = 50
+num_features =200
 model = ModelSelection(option,clf_opt,num_features)
 
 ############### KFold Cross Validation ##########
