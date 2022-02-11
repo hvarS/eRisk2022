@@ -15,9 +15,9 @@ trn_data,trn_cat= dataset.get_data()
 # trn_data,trn_cat = trn_data[:1000],trn_cat[:1000]
 
 ############### Choosing Model and Model Parameters ##################
-option = 'tfidf'
+option = 'doc2vec'
 clf_opt = 'svm'
-num_features = 7000
+num_features = 300
 model = ModelSelection(option,clf_opt,num_features)
 
 ############### KFold Cross Validation ##########

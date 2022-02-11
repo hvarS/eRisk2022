@@ -154,9 +154,13 @@ def doc2vec_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
     clf,clf_parameters,ext2=classification_pipeline(clf_opt) 
     pipeline = Pipeline([('clf', clf),])       
     grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,n_jobs = -1) 
+    start = time.time()
     grid.fit(trn_vec,trn_cat)     
     clf= grid.best_estimator_
+    end = time.time()
+    print('Time Taken to fit GridSearchCV :',end-start,'s')
 
+    
     model_path = os.path.join('saved_models','doc2vec_'+clf_opt)
     if not os.path.exists(model_path):
         os.mkdir(model_path)
