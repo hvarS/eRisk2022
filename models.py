@@ -28,7 +28,6 @@ class ModelSelection(object):
             if self.save:
                 clf,_=tfidf_training_model(x_train,y_train,self.num_features,self.opt)
             else:
-                print('Loading Pretrained TfIDF Model')
                 clf=joblib.load(self.check_path)
             predicted = clf.predict(x_valid)
             predicted_probability = clf.predict_proba(x_valid)

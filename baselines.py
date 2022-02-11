@@ -55,7 +55,7 @@ def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt
     'vect__ngram_range': ((1, 2),(1,3)),  # Unigrams, Bigrams or Trigrams
     }
     parameters={**feature_parameters,**clf_parameters} 
-    grid = GridSearchCV(pipeline,parameters,scoring='f1_micro',cv=10,verbose=2,n_jobs=8)          
+    grid = GridSearchCV(pipeline,parameters,scoring='f1_micro',cv=10,verbose=2,n_jobs=4)          
     start = time.time()
     grid.fit(trn_data,trn_cat)     
     end = time.time()
@@ -107,7 +107,7 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
         except:                                  # If the input is wrong
             print('Wrong Input. Enter number of terms correctly. \n')
             sys.exit()
-    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,verbose = -1,n_jobs=8) 
+    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,verbose = -1,n_jobs=4) 
     start = time.time()
     grid.fit(trn_vec,trn_cat)     
     end = time.time()
@@ -153,7 +153,7 @@ def doc2vec_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
 # Classificiation and feature selection pipelines
     clf,clf_parameters,ext2=classification_pipeline(clf_opt) 
     pipeline = Pipeline([('clf', clf),])       
-    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,n_jobs = 8) 
+    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,n_jobs = 4) 
     start = time.time()
     grid.fit(trn_vec,trn_cat)     
     clf= grid.best_estimator_
