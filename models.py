@@ -45,9 +45,9 @@ class ModelSelection(object):
             
             print(' Tokenizing Validation Dataset')
             for doc in tqdm(x_valid):
-                doc=nltk.word_tokenize(doc.lower()) 
-                tst_docs.append(doc)                                
-            corpus = [trn_dct.doc2bow(row) for row in tst_docs]     
+                doc=nltk.word_tokenize(doc.lower())
+                tst_docs.append(doc)
+            corpus = [trn_dct.doc2bow(row) for row in tst_docs]
             no_of_terms=len(trn_dct.keys())
             for itm in corpus:
                     vec=[0]*no_of_terms                          # Empty vector of terms for a document
@@ -56,6 +56,19 @@ class ModelSelection(object):
                         vec[elm[0]]=elm[1]
                     tst_vec.append(vec) 
             predicted = clf.predict(tst_vec)
+            predicted_probability = clf.predict_proba(tst_vec)
+        elif self.model=='doc2vec':
+            # Paragraph Embedding based CBOW and Skipgram Model
+            if self.save:
+                clf,ext2,trn_model=doc2vec_training_model(x_train,y_train,self.num_features,self.opt)          # Building the training model for the first time
+            else :
+                clf=joblib.load(self.check_path)                # Call the trained model from second time onwards
+                trn_model=joblib.load(os.path.join(os.getcwd(),'saved_models',self.model+'_'+self.opt,self.model+'_'+self.opt+'_'+str(self.num_features)+'_model.joblib'))
+            for doc in tqdm(x_valid):
+                doc=nltk.word_tokenize(doc.lower())
+                inf_vec = trn_model.infer_vector(doc,epochs=100)
+                tst_vec.append(inf_vec)
+            predicted = clf.predict(tst_vec)     
             predicted_probability = clf.predict_proba(tst_vec)
         else:
             print('Please Select a correct model configuration')

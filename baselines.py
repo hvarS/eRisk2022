@@ -153,7 +153,7 @@ def doc2vec_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
 # Classificiation and feature selection pipelines
     clf,clf_parameters,ext2=classification_pipeline(clf_opt) 
     pipeline = Pipeline([('clf', clf),])       
-    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10) 
+    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,n_jobs = -1) 
     grid.fit(trn_vec,trn_cat)     
     clf= grid.best_estimator_
 
