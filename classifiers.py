@@ -13,6 +13,7 @@ def classification_pipeline(opt = 'ab'):
         be1 = svm.SVC(kernel='linear', class_weight='balanced',probability=True)              
         be2 = LogisticRegression(solver='liblinear',class_weight='balanced') 
         be3 = DecisionTreeClassifier(max_depth=50)
+        ext2 = 'adaboost'
         clf = AdaBoostClassifier(algorithm='SAMME.R',n_estimators=100)
         clf_parameters = {
         'clf__base_estimator':(be1,be2,be3),
@@ -21,6 +22,7 @@ def classification_pipeline(opt = 'ab'):
     # Logistic Regression 
     elif opt=='lr':
         print('\n\t### Training Logistic Regression Classifier ### \n')
+        ext2 = 'logistic_regression'
         clf = LogisticRegression(solver='liblinear',class_weight='balanced') 
         clf_parameters = {
         'clf__random_state':(0,10),
@@ -28,6 +30,7 @@ def classification_pipeline(opt = 'ab'):
     # Linear SVC 
     elif opt=='ls':   
         print('\n\t### Training Linear SVC Classifier ### \n')
+        ext2 = 'linear_svc'
         clf = svm.LinearSVC(class_weight='balanced')  
         clf_parameters = {
         'clf__C':(0.1,1,2,10,50,100),
@@ -35,6 +38,7 @@ def classification_pipeline(opt = 'ab'):
     # Multinomial Naive Bayes
     elif opt=='nb':
         print('\n\t### Training Multinomial Naive Bayes Classifier ### \n')
+        ext2 = 'naive_bayes'
         clf = MultinomialNB(fit_prior=True, class_prior=None)  
         clf_parameters = {
         'clf__alpha':(0,1),
