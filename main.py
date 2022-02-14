@@ -16,7 +16,7 @@ trn_data,trn_cat = trn_data[:1000],trn_cat[:1000]
 
 ############### Choosing Model and Model Parameters ##################
 option = 'entropy'
-clf_opt = 'ab'
+clf_opt = 'lr'
 num_features = 7000
 model = ModelSelection(option,clf_opt,num_features)
 
