@@ -28,7 +28,7 @@ if not os.path.exists(os.path.join(path,'saved_models')):
 
 
 # TFIDF model    
-def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt = 'ab'):
+def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt = 'ab',num_jobs = 1):
     print('\n ***** Building TFIDF Based Training Model ***** \n')         
     clf,clf_parameters,ext2=classification_pipeline(clf_opt) 
     if no_of_selected_features==None:                                  # To use all the terms of the vocabulary
@@ -55,7 +55,7 @@ def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt
     'vect__ngram_range': ((1, 2),(1,3)),  # Unigrams, Bigrams or Trigrams
     }
     parameters={**feature_parameters,**clf_parameters} 
-    grid = GridSearchCV(pipeline,parameters,scoring='f1_micro',cv=10,verbose=2)          
+    grid = GridSearchCV(pipeline,parameters,scoring='f1_micro',cv=10,verbose=2,n_jobs=num_jobs)          
     start = time.time()
     grid.fit(trn_data,trn_cat)     
     end = time.time()
@@ -75,7 +75,7 @@ def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt
 
 
 # LogEntropy model    
-def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_opt = 'ab'): 
+def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_opt = 'ab',num_jobs = 1): 
     print('\n ***** Building Entropy Based Training Model ***** \n')
     print('No of Selected Terms \t'+str(no_of_selected_features)) 
     trn_vec=[]; trn_docs=[]; 
@@ -107,7 +107,7 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
         except:                                  # If the input is wrong
             print('Wrong Input. Enter number of terms correctly. \n')
             sys.exit()
-    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,verbose = -1,n_jobs = 2) 
+    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,verbose = -1,n_jobs = num_jobs) 
     start = time.time()
     grid.fit(trn_vec,trn_cat)     
     end = time.time()
@@ -129,7 +129,7 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
 
 
 # Doc2Vec model    
-def doc2vec_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_opt = 'ab'):
+def doc2vec_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_opt = 'ab',num_jobs = 1):
     print('\n ***** Building Doc2Vec Based Training Model ***** \n')
     print('No of Features \t'+str(no_of_selected_features)) 
     tagged_data = [TaggedDocument(words=nltk.word_tokenize(_d.lower()), tags=[str(i)]) for i, _d in enumerate(trn_data)]
@@ -153,7 +153,7 @@ def doc2vec_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
 # Classificiation and feature selection pipelines
     clf,clf_parameters,ext2=classification_pipeline(clf_opt) 
     pipeline = Pipeline([('clf', clf),])       
-    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10) 
+    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=10,n_jobs=num_jobs) 
     start = time.time()
     grid.fit(trn_vec,trn_cat)     
     clf= grid.best_estimator_

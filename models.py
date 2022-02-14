@@ -6,11 +6,12 @@ import sys
 from tqdm import tqdm 
 
 class ModelSelection(object):
-    def __init__(self,model = 'entropy',clf_opt = 'ab',num_features = None) -> None:
+    def __init__(self,model = 'entropy',clf_opt = 'ab',num_features = None,num_jobs = 1) -> None:
         self.model = model
         self.opt = clf_opt
         self.num_features  = num_features
         self.save = False
+        self.num_jobs = num_jobs
 
         self.check_path = os.path.join(os.getcwd(),'saved_models',model+'_'+clf_opt,model+'_'+clf_opt+'_'+str(num_features)+'_clf.joblib')
         if not os.path.exists(self.check_path):
@@ -26,7 +27,7 @@ class ModelSelection(object):
 
         if self.model == 'tfidf':
             if self.save:
-                clf,_=tfidf_training_model(x_train,y_train,self.num_features,self.opt)
+                clf,_=tfidf_training_model(x_train,y_train,self.num_features,self.opt,self.num_jobs)
             else:
                 clf=joblib.load(self.check_path)
             predicted = clf.predict(x_valid)
@@ -34,7 +35,7 @@ class ModelSelection(object):
         
         elif self.model == 'entropy':
             if self.save:
-                clf,_,trn_dct,trn_model=entropy_training_model(x_train,y_train,self.num_features,self.opt)
+                clf,_,trn_dct,trn_model=entropy_training_model(x_train,y_train,self.num_features,self.opt,self.num_jobs)
             else:
                 clf=joblib.load(self.check_path)
                 trn_dct=joblib.load(os.path.join(os.getcwd(),'saved_models',self.model+'_'+self.opt,self.model+'_'+self.opt+'_'+str(self.num_features)+'_dict.joblib'))
@@ -57,7 +58,7 @@ class ModelSelection(object):
         elif self.model=='doc2vec':
             # Paragraph Embedding based CBOW and Skipgram Model
             if self.save:
-                clf,ext2,trn_model=doc2vec_training_model(x_train,y_train,self.num_features,self.opt)          # Building the training model for the first time
+                clf,ext2,trn_model=doc2vec_training_model(x_train,y_train,self.num_features,self.opt,self.num_jobs)          # Building the training model for the first time
             else :
                 clf=joblib.load(self.check_path)                # Call the trained model from second time onwards
                 trn_model=joblib.load(os.path.join(os.getcwd(),'saved_models',self.model+'_'+self.opt,self.model+'_'+self.opt+'_'+str(self.num_features)+'_model.joblib'))

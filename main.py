@@ -17,7 +17,8 @@ parser.add_argument('--features', metavar='N', type=int, default=200,
                     help='select number of features')
 parser.add_argument('--train_loc', metavar='D', type=str, default='',
                     help='specify training data location')
-
+parser.add_argument('--jobs', metavar='J', type=int, default=1,
+                    help='specify num of jobs while training')
 args = parser.parse_args()
 
 ############### Preparing Data ##################
@@ -31,7 +32,7 @@ trn_data,trn_cat= dataset.get_data()
 option = args.model
 clf_opt = args.clf
 num_features = args.features
-model = ModelSelection(option,clf_opt,num_features)
+model = ModelSelection(option,clf_opt,num_features,args.jobs)
 
 ############### KFold Cross Validation ##########
 skf = StratifiedKFold(n_splits=10)
