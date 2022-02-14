@@ -6,18 +6,31 @@ from sklearn.metrics import classification_report,confusion_matrix
 from collections import Counter
 import numpy as np
 import statistics
+import argparse
+
+parser = argparse.ArgumentParser(description='eRisk2022')
+parser.add_argument('--model', metavar='M', type=str, default='entropy',
+                    help=' select base model from tfidf,doc2vec,entropy')
+parser.add_argument('--clf', metavar='O', type=str, default='ab',
+                    help='select classifier')
+parser.add_argument('--features', metavar='N', type=int, default=200,
+                    help='select number of features')
+parser.add_argument('--train_loc', metavar='D', type=str, default='',
+                    help='specify training data location')
+
+args = parser.parse_args()
 
 ############### Preparing Data ##################
-dataset = PathologicalGamblingDataset(os.getcwd())
+dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc))
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 
 # trn_data,trn_cat = trn_data[:1000],trn_cat[:1000]
 
 ############### Choosing Model and Model Parameters ##################
-option = 'tfidf'
-clf_opt = 'rf'
-num_features = 200
+option = args.model
+clf_opt = args.clf
+num_features = args.features
 model = ModelSelection(option,clf_opt,num_features)
 
 ############### KFold Cross Validation ##########
