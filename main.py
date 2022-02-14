@@ -24,7 +24,7 @@ parser.add_argument('--fpath', metavar='F', type=str, default='task1_data',
 args = parser.parse_args()
 
 ############### Preparing Data ##################
-dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fname)
+dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 
