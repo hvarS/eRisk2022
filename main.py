@@ -19,10 +19,12 @@ parser.add_argument('--train_loc', metavar='D', type=str, default='',
                     help='specify training data location')
 parser.add_argument('--jobs', metavar='J', type=int, default=1,
                     help='specify num of jobs while training')
+parser.add_argument('--fpath', metavar='F', type=str, default='task1_data',
+                    help='data folder name ')
 args = parser.parse_args()
 
 ############### Preparing Data ##################
-dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc))
+dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fname)
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 

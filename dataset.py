@@ -9,9 +9,10 @@ task1_loc = 'task1_data'
 task1_training_loc = 't1_training/TRAINING_DATA/2021_cases'
 
 class PathologicalGamblingDataset(Dataset):
-    def __init__(self,path):
+    def __init__(self,path,fpath):
         super(PathologicalGamblingDataset,self).__init__()
         self.path = path
+        self.fpath = fpath
         self.trn_data,self.trn_cat=self.get_training_data()
     
     def get_data(self):
@@ -21,7 +22,7 @@ class PathologicalGamblingDataset(Dataset):
         print('\n ***** Reading Training Data ***** \n')
 
         training_loc = os.path.join(self.path,task1_loc,task1_training_loc)
-        golden_truth_path = os.path.join(self.path,task1_loc,task1_training_loc,'risk_golden_truth.txt')
+        golden_truth_path = os.path.join(self.path,self.fpath,task1_training_loc,'risk_golden_truth.txt')
         
         fl=open(golden_truth_path, 'r')  
         reader = fl.readlines()
