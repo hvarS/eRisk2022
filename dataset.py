@@ -21,7 +21,7 @@ class PathologicalGamblingDataset(Dataset):
     def get_training_data(self):
         print('\n ***** Reading Training Data ***** \n')
 
-        training_loc = os.path.join(self.path,task1_loc,task1_training_loc)
+        training_loc = os.path.join(self.path,self.fpath,task1_training_loc)
         golden_truth_path = os.path.join(self.path,self.fpath,task1_training_loc,'risk_golden_truth.txt')
         
         fl=open(golden_truth_path, 'r')  
