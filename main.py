@@ -7,11 +7,12 @@ from collections import Counter
 import numpy as np
 import statistics
 import argparse
+from sklearn.model_selection import train_test_split
 
 parser = argparse.ArgumentParser(description='eRisk2022')
 parser.add_argument('--model', metavar='M', type=str, default='entropy',
                     help=' select base model from tfidf,doc2vec,entropy')
-parser.add_argument('--clf', metavar='O', type=str, default='ab',
+parser.add_argument('--clf', metavar='O', type=str, default='svm',
                     help='select classifier')
 parser.add_argument('--features', metavar='N', type=int, default=200,
                     help='select number of features')
@@ -40,23 +41,33 @@ model = ModelSelection(option,clf_opt,num_features,args.jobs)
 skf = StratifiedKFold(n_splits=10)
 
 predicted_class_labels=[]; actual_class_labels=[]; count=0; probs=[];
-for train_index, test_index in skf.split(trn_data,trn_cat):
-    X_train=[]; y_train=[]; X_test=[]; y_test=[]
-    for item in train_index:
-        X_train.append(trn_data[item])
-        y_train.append(trn_cat[item])
-    for item in test_index:
-        X_test.append(trn_data[item])
-        y_test.append(trn_cat[item])
-    count+=1
-    print('\n')                
-    print('CV Level '+str(count))
-    predicted,predicted_probability= model.fit(X_train,y_train,X_test)
-    for item in predicted_probability:
+# for train_index, test_index in skf.split(trn_data,trn_cat):
+#     X_train=[]; y_train=[]; X_test=[]; y_test=[]
+#     for item in train_index:
+#         X_train.append(trn_data[item])
+#         y_train.append(trn_cat[item])
+#     for item in test_index:
+#         X_test.append(trn_data[item])
+#         y_test.append(trn_cat[item])
+#     count+=1
+#     print('\n')                
+#     print('CV Level '+str(count))
+#     predicted,predicted_probability= model.fit(X_train,y_train,X_test)
+#     for item in predicted_probability:
+#         probs.append(float(max(item)))
+#     for item in y_test:
+#         actual_class_labels.append(item)
+#     for item in predicted:
+#         predicted_class_labels.append(item)
+
+## Result Verification
+trn_data, tst_data, trn_cat, tst_cat = train_test_split(trn_data, trn_cat, test_size=0.20, random_state=42,stratify=trn_cat)   
+predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data) 
+for item in predicted_probability:
         probs.append(float(max(item)))
-    for item in y_test:
+for item in tst_cat:
         actual_class_labels.append(item)
-    for item in predicted:
+for item in predicted:
         predicted_class_labels.append(item)
 
 #   Evaluation 
