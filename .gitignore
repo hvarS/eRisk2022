@@ -5,3 +5,4 @@ logs
 bert_model
 task1_data/*
 saved_models/*
+*.pyc

@@ -58,7 +58,7 @@ class PathologicalGamblingDataset(Dataset):
                             text=re.sub(r'r/', '', text)
         #                    text=re.sub(r'\'', r'', text)
                             text=re.sub(r'([\s])([A-Z])([a-z0-9\s]+)', r'. \2\3', text)      
-                            text = re.sub(r'[^!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~\n\w]+',' ', text)     # Remove special characters e.g., emoticons-😄.
+                            text = re.sub(r'[^!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~\n\w]+',' ', text)     # Remove special characters e.g., emoticons.
                             all_text+=text 
         #        all_text=re.sub(r'\\', r'', all_text)
                 all_text=re.sub(r'[\s]+', ' ', all_text)                    

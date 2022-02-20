@@ -1,4 +1,5 @@
 from baselines import tfidf_training_model,doc2vec_training_model,entropy_training_model
+from bert import bert_training_model
 import os
 import joblib
 import nltk
@@ -68,6 +69,16 @@ class ModelSelection(object):
                 tst_vec.append(inf_vec)
             predicted = clf.predict(tst_vec)     
             predicted_probability = clf.predict_proba(tst_vec)
+        elif self.model=='transformer':
+            trn_model,trn_tokenizer,class_names= bert_training_model(x_train,y_train) 
+            predicted=[]; predicted_probability=[]
+            for doc in x_valid:
+                inputs = trn_tokenizer(doc, padding=True, truncation=True, max_length=512, return_tensors="pt") 
+                outputs = trn_model(**inputs)
+                probs = outputs[0].softmax(1)
+                cl=class_names[probs.argmax()]
+                predicted.append(cl)      
+                predicted_probability.append(probs) 
         else:
             print('Please Select a correct model configuration')
             sys.exit(0)
