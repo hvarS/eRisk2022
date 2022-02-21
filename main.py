@@ -39,7 +39,7 @@ trn_data,trn_cat= dataset.get_data()
 option = args.model
 clf_opt = args.clf
 num_features = args.features
-model = ModelSelection(option,clf_opt,num_features,args.jobs)
+model = ModelSelection(option,clf_opt,num_features,args.jobs,model_name=args.model_name)
 
 ############### KFold Cross Validation ##########
 skf = StratifiedKFold(n_splits=10)

@@ -9,13 +9,13 @@ import torch
 
 
 class ModelSelection(object):
-    def __init__(self,model = 'entropy',clf_opt = 'ab',num_features = None,num_jobs = 1) -> None:
+    def __init__(self,model = 'entropy',clf_opt = 'ab',num_features = None,num_jobs = 1,model_name = 'bert-base-uncased') -> None:
         self.model = model
         self.opt = clf_opt
         self.num_features  = num_features
         self.save = False
-        self.num_jobs = num_jobs
-
+        self.num_jobs = num_jobs    
+        self.model_name = model_name
         self.check_path = os.path.join(os.getcwd(),'saved_models',model+'_'+clf_opt,model+'_'+clf_opt+'_'+str(num_features)+'_clf.joblib')
         if not os.path.exists(self.check_path):
             self.save = True
@@ -72,9 +72,9 @@ class ModelSelection(object):
             predicted = clf.predict(tst_vec)     
             predicted_probability = clf.predict_proba(tst_vec)
         elif self.model=='transformer':
-            trn_model,trn_tokenizer,class_names= bert_training_model(x_train,y_train) 
+            trn_model,trn_tokenizer,class_names= bert_training_model(x_train,y_train,max_length = 2048,model_name = self.model_name) 
             predicted=[]; predicted_probability=[]
-            bert_validate(x_valid,trn_model,trn_tokenizer,class_names,predicted,predicted_probability)
+            bert_validate(x_valid,trn_model,trn_tokenizer,class_names,predicted,predicted_probability,max_length=2048)
         else:
             print('Please Select a correct model configuration')
             sys.exit(0)

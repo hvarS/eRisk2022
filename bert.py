@@ -70,9 +70,9 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
         model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
         training_args = TrainingArguments(
             output_dir='./TransformerResults',          # output directory
-            num_train_epochs=10,              # total number of training epochs
-            per_device_train_batch_size=16,  # batch size per device during training
-            per_device_eval_batch_size=16,   # batch size for evaluation
+            num_train_epochs=5,              # total number of training epochs
+            per_device_train_batch_size=4,  # batch size per device during training
+            per_device_eval_batch_size=4,   # batch size for evaluation
             warmup_steps=500,                # number of warmup steps for learning rate scheduler
             weight_decay=0.01,               # strength of weight decay
             logging_dir='./logs',            # directory for storing logs
@@ -88,7 +88,7 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
             compute_metrics=compute_metrics,     # the callback that computes metrics of interest
             )
         print('\n Trainer done \n')
-        # trainer.train()
+        trainer.train()
         print('\n Trainer train done \n')        
         # trainer.evaluate()
         print('\n save model \n')
@@ -103,7 +103,7 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
         return model,tokenizer,class_names
 
 def bert_validate(x_valid,trn_model,trn_tokenizer,class_names,predicted,predicted_probability,max_length = 512):
-    val_encodings = trn_tokenizer(x_valid, padding=True, truncation=True, max_length=512, return_tensors="pt")
+    val_encodings = trn_tokenizer(x_valid, padding=True, truncation=True, max_length=max_length, return_tensors="pt")
     valid_dataset = get_validation_data_format(val_encodings)
     val_loader = DataLoader(valid_dataset,batch_size=1)
 
