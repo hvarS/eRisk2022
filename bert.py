@@ -60,6 +60,12 @@ def compute_metrics(pred):
 
 def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name = 'bert-base-uncased'): 
         print('\n ***** Running BERT Model ***** \n')       
+        
+        #Decouple Model name
+        
+        checkpoint_path = "TransformerResults/{}/checkpoint-1500".format('_'.join(model_name.split('/')))
+        
+
         tokenizer = AutoTokenizer.from_pretrained(model_name, do_lower_case=True) 
         labels=np.asarray(trn_cat)     # Class labels in nparray format     
         (train_texts, valid_texts, train_labels, valid_labels)= train_test_split(trn_data, labels, test_size=test_size)
@@ -67,9 +73,14 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
         valid_encodings = tokenizer(valid_texts, truncation=True, padding=True, max_length=max_length)
         train_dataset = get_torch_data_format(train_encodings, train_labels)
         valid_dataset = get_torch_data_format(valid_encodings, valid_labels)
-        model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
+        if os.path.exists(checkpoint_path):
+            print('Checkpoint Exists : Starting from the last used one')
+            model = AutoModelForSequenceClassification.from_pretrained(checkpoint_path, num_labels=2)
+        else:
+            print('Checkpoint Does Not exists!')
+            model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
         training_args = TrainingArguments(
-            output_dir='./TransformerResults',          # output directory
+            output_dir='./TransformerResults/{}'.format('_'.join(model_name.split('/'))),          # output directory
             num_train_epochs=5,              # total number of training epochs
             per_device_train_batch_size=4,  # batch size per device during training
             per_device_eval_batch_size=4,   # batch size for evaluation
@@ -88,11 +99,14 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
             compute_metrics=compute_metrics,     # the callback that computes metrics of interest
             )
         print('\n Trainer done \n')
-        trainer.train()
+        trainer.train(resume_from_checkpoint = True)
         print('\n Trainer train done \n')        
-        # trainer.evaluate()
         print('\n save model \n')
+
+        parts = model_name.split('/')
+        model_name = '_'.join(parts)    
         model_path = "saved_models/transformer_checkpoints/"+"{}_model".format(model_name)
+        
         if not os.path.exists(model_path):
             os.mkdir(model_path)
         os.chdir(model_path)

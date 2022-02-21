@@ -72,9 +72,9 @@ class ModelSelection(object):
             predicted = clf.predict(tst_vec)     
             predicted_probability = clf.predict_proba(tst_vec)
         elif self.model=='transformer':
-            trn_model,trn_tokenizer,class_names= bert_training_model(x_train,y_train,max_length = 2048,model_name = self.model_name) 
+            trn_model,trn_tokenizer,class_names= bert_training_model(x_train,y_train,max_length = 512,model_name = self.model_name) 
             predicted=[]; predicted_probability=[]
-            bert_validate(x_valid,trn_model,trn_tokenizer,class_names,predicted,predicted_probability,max_length=2048)
+            bert_validate(x_valid,trn_model,trn_tokenizer,class_names,predicted,predicted_probability,max_length=512)
         else:
             print('Please Select a correct model configuration')
             sys.exit(0)
