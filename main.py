@@ -4,10 +4,12 @@ from sklearn.model_selection._split import StratifiedKFold
 from models import ModelSelection 
 from sklearn.metrics import classification_report,confusion_matrix
 from collections import Counter
-import numpy as np
+import torch
 import statistics
 import argparse
 from sklearn.model_selection import train_test_split
+
+os.environ['CUDA_VISIBLE_DEVICES'] = "2"
 
 parser = argparse.ArgumentParser(description='eRisk2022')
 parser.add_argument('--model', metavar='M', type=str, default='entropy',
@@ -22,6 +24,8 @@ parser.add_argument('--jobs', metavar='J', type=int, default=1,
                     help='specify num of jobs while training')
 parser.add_argument('--fpath', metavar='F', type=str, default='task1_data',
                     help='data folder name ')
+parser.add_argument('--model_name', metavar='T', type=str, default='bert-base-uncased',
+                    help='name of the huggingface transformer')
 args = parser.parse_args()
 
 ############### Preparing Data ##################
@@ -64,16 +68,17 @@ predicted_class_labels=[]; actual_class_labels=[]; count=0; probs=[];
 trn_data, tst_data, trn_cat, tst_cat = train_test_split(trn_data, trn_cat, test_size=0.20, random_state=42,stratify=trn_cat)   
 predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data) 
 for item in predicted_probability:
-        probs.append(float(max(item)))
+        probs.append(float(torch.max(item)))
 for item in tst_cat:
         actual_class_labels.append(item)
 for item in predicted:
-        predicted_class_labels.append(item)
+        predicted_class_labels.append(int(item))
 
 #   Evaluation 
 class_names = list(Counter(actual_class_labels).keys())
 class_names = [str(x) for x in class_names]
 
+print(type(actual_class_labels[0]),type(predicted_class_labels[0]))
 
 print(classification_report(actual_class_labels,predicted_class_labels,target_names=class_names))
 tn, fp, fn, tp = confusion_matrix(actual_class_labels, predicted_class_labels).ravel()
