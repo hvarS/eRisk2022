@@ -80,13 +80,13 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
             print('Checkpoint Does Not exists!')
             model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
         training_args = TrainingArguments(
-            output_dir='./TransformerResults/{}'.format('_'.join(model_name.split('/'))),          # output directory
+            output_dir='saved_models/transformer_checkpoints/{}_model'.format('_'.join(model_name.split('/'))),          # output directory
             num_train_epochs=5,              # total number of training epochs
             per_device_train_batch_size=4,  # batch size per device during training
             per_device_eval_batch_size=4,   # batch size for evaluation
             warmup_steps=500,                # number of warmup steps for learning rate scheduler
             weight_decay=0.01,               # strength of weight decay
-            logging_dir='./logs',            # directory for storing logs
+            logging_dir='./transformerLogs',            # directory for storing logs
             load_best_model_at_end=True,     # load the best model when finished training (default metric is loss)
             logging_steps=100,               # log & save weights each logging_steps
             evaluation_strategy="steps",     # evaluate each `logging_steps`
@@ -99,13 +99,17 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
             compute_metrics=compute_metrics,     # the callback that computes metrics of interest
             )
         print('\n Trainer done \n')
-        trainer.train(resume_from_checkpoint = True)
+        # if os.path.exists(checkpoint_path):
+        #     print('Resuming from Checkpoint !')
+        #     trainer.train(resume_from_checkpoint = True)
+        # else:
+        #     trainer.train()
         print('\n Trainer train done \n')        
         print('\n save model \n')
 
         parts = model_name.split('/')
         model_name = '_'.join(parts)    
-        model_path = "saved_models/transformer_checkpoints/"+"{}_model".format(model_name)
+        model_path = os.path.join("saved_models/transformer_checkpoints","{}_model".format(model_name))
         
         if not os.path.exists(model_path):
             os.mkdir(model_path)
