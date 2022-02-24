@@ -134,14 +134,14 @@ def doc2vec_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
     print('No of Features \t'+str(no_of_selected_features)) 
     tagged_data = [TaggedDocument(words=nltk.word_tokenize(_d.lower()), tags=[str(i)]) for i, _d in enumerate(trn_data)]
     max_epochs = 10       
-    trn_model = Doc2Vec(vector_size=no_of_selected_features,alpha=0.025,min_alpha=0.00025,min_count=1,dm =1)
+    trn_model = Doc2Vec(vector_size=no_of_selected_features,alpha=0.025,min_alpha=0.00025,min_count=1,dm =1,workers = num_jobs)
     trn_model.build_vocab(tagged_data)  
     print('Number of Training Samples {0}'.format(trn_model.corpus_count))   
-    for epoch in range(max_epochs):
+    for epoch in tqdm(range(max_epochs)):
         print('Doc2Vec Iteration {0}'.format(epoch))
         trn_model.train(tagged_data,
                     total_examples=trn_model.corpus_count,
-                    epochs=100) 
+                    epochs=10) 
         # decrease the learning rate
         trn_model.alpha -= 0.0002
     trn_vec=[]

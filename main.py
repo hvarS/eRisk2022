@@ -1,3 +1,4 @@
+from numpy import isin
 from dataset import PathologicalGamblingDataset
 import os 
 from sklearn.model_selection._split import StratifiedKFold
@@ -33,7 +34,7 @@ dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),a
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 
-# trn_data,trn_cat = trn_data[:1000],trn_cat[:1000]
+trn_data,trn_cat = trn_data[:200],trn_cat[:200]
 
 ############### Choosing Model and Model Parameters ##################
 option = args.model
@@ -68,7 +69,10 @@ predicted_class_labels=[]; actual_class_labels=[]; count=0; probs=[];
 trn_data, tst_data, trn_cat, tst_cat = train_test_split(trn_data, trn_cat, test_size=0.20, random_state=42,stratify=trn_cat)   
 predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data) 
 for item in predicted_probability:
-        probs.append(float(torch.max(item)))
+        if torch.is_tensor(item):
+                probs.append(float(torch.max(item)))
+        else:
+                probs.append(float(max(item)))
 for item in tst_cat:
         actual_class_labels.append(item)
 for item in predicted:
