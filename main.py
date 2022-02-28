@@ -34,7 +34,7 @@ dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),a
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 
-trn_data,trn_cat = trn_data[:1000],trn_cat[:1000]
+# trn_data,trn_cat = trn_data[:500],trn_cat[:500]
 
 ############### Choosing Model and Model Parameters ##################
 option = args.model
@@ -66,7 +66,7 @@ predicted_class_labels=[]; actual_class_labels=[]; count=0; probs=[];
 #         predicted_class_labels.append(item)
 
 ## Result Verification
-trn_data, tst_data, trn_cat, tst_cat = train_test_split(trn_data, trn_cat, test_size=0.20, random_state=42,stratify=trn_cat)   
+trn_data, tst_data, trn_cat, tst_cat = train_test_split(trn_data, trn_cat, test_size=0.50, random_state=42,stratify=trn_cat)   
 predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data) 
 for item in predicted_probability:
         if torch.is_tensor(item):
