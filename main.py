@@ -34,7 +34,7 @@ dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),a
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 
-# trn_data,trn_cat = trn_data[:500],trn_cat[:500]
+trn_data,trn_cat = trn_data[:1000],trn_cat[:1000]
 
 ############### Choosing Model and Model Parameters ##################
 option = args.model
