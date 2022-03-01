@@ -1,4 +1,3 @@
-from numpy import isin
 from dataset import PathologicalGamblingDataset
 import os 
 from sklearn.model_selection._split import StratifiedKFold
@@ -34,7 +33,7 @@ dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),a
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 
-trn_data,trn_cat = trn_data[:1000],trn_cat[:1000]
+# trn_data,trn_cat = trn_data[:1000],trn_cat[:1000]
 
 ############### Choosing Model and Model Parameters ##################
 option = args.model

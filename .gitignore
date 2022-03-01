@@ -9,3 +9,5 @@ saved_models/*
 checkpoints/*
 TransformerResults
 transformerLogs
+training.csv
+trial.ipynb
