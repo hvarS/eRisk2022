@@ -17,7 +17,7 @@ def classification_pipeline(opt = 'ab'):
         clf = AdaBoostClassifier(algorithm='SAMME.R',n_estimators=100)
         clf_parameters = {
         'clf__base_estimator':(be1,be2,be3),
-        'clf__random_state':(0,10),
+        'clf__random_state':[0],
         }          
     # Logistic Regression 
     elif opt=='lr':
