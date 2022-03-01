@@ -17,7 +17,7 @@ def classification_pipeline(opt = 'ab'):
         clf = AdaBoostClassifier(algorithm='SAMME.R',n_estimators=100)
         clf_parameters = {
         'clf__base_estimator':(be1,be2,be3),
-        'clf__random_state':(0,10),
+        'clf__random_state':[0],
         }          
     # Logistic Regression 
     elif opt=='lr':
@@ -50,8 +50,8 @@ def classification_pipeline(opt = 'ab'):
         clf = RandomForestClassifier(max_features=None,class_weight='balanced')
         clf_parameters = {
         'clf__criterion':('entropy','gini'),       
-        'clf__n_estimators':[30],#(30,50,100)
-        'clf__max_depth':[10],#(10,20,30,50,100,200)
+        'clf__n_estimators':[30],#(30,50,100),
+        'clf__max_depth':[10],#(10,20,30,50,100,200),
         }          
     # Support Vector Machine  
     elif opt=='svm': 

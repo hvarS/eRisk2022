@@ -1,3 +1,4 @@
+from pyexpat import model
 from sklearn.pipeline import Pipeline
 from sklearn.feature_extraction.text import CountVectorizer,TfidfTransformer
 from sklearn.feature_selection import SelectKBest,chi2
@@ -14,6 +15,7 @@ from tqdm import tqdm
 from sklearn.preprocessing import StandardScaler
 from nltk.corpus import stopwords
 import time 
+import numpy as np
 
 en_stopwords = ['a', 'about', 'above', 'across', 'after', 'again', 'against', 'all', 'almost', 'alone', 'along', 'already', 'also', 'although', 'always', 'among', 'an', 'and', 'another', 'any', 'anybody', 'anyone', 'anything', 'anywhere', 'are', 'area', 'areas', 'around', 'as', 'ask', 'asked', 'asking', 'asks', 'at', 'away', 'b', 'back', 'backed', 'backing', 'backs', 'be', 'became', 'because', 'become', 'becomes', 'been', 'before', 'began', 'behind', 'being', 'beings', 'best', 'better', 'between', 'big', 'both', 'but', 'by', 'c', 'came', 'can', 'cannot', 'case', 'cases', 'certain', 'certainly', 'clear', 'clearly', 'come', 'could', 'd', 'did', 'differ', 'different', 'differently', 'do', 'does', 'done', 'down', 'down', 'downed', 'downing', 'downs', 'during', 'e', 'each', 'early', 'either', 'end', 'ended', 'ending', 'ends', 'enough', 'even', 'evenly', 'ever', 'every', 'everybody', 'everyone', 'everything', 'everywhere', 'f', 'face', 'faces', 'fact', 'facts', 'far', 'felt', 'few', 'find', 'finds', 'first', 'for', 'four', 'from', 'full', 'fully', 'further', 'furthered', 'furthering', 'furthers', 'g', 'gave', 'general', 'generally', 'get', 'gets', 'give', 'given', 'gives', 'go', 'going', 'good', 'goods', 'got', 'great', 'greater', 'greatest', 'group', 'grouped', 'grouping', 'groups', 'h', 'had', 'has', 'have', 'having', 'he', 'her', 'here', 'herself', 'high', 'high', 'high', 'higher', 'highest', 'him', 'himself', 'his', 'how', 'however', 'i', 'if', 'important', 'in', 'interest', 'interested', 'interesting', 'interests', 'into', 'is', 'it', 'its', 'itself', 'j', 'just', 'k', 'keep', 'keeps', 'kind', 'knew', 'know', 'known', 'knows', 'l', 'large', 'largely', 'last', 'later', 'latest', 'least', 'less', 'let', 'lets', 'like', 'likely', 'long', 'longer', 'longest', 'm', 'made', 'make', 'making', 'man', 'many', 'may', 'me', 'member', 'members', 'men', 'might', 'more', 'most', 'mostly', 'mr', 'mrs', 'much', 'must', 'my', 'myself', 'n', 'necessary', 'need', 'needed', 'needing', 'needs', 'never', 'new', 'new', 'newer', 'newest', 'next', 'no', 'nobody', 'non', 'noone', 'not', 'nothing', 'now', 'nowhere', 'number', 'numbers', 'o', 'of', 'off', 'often', 'old', 'older', 'oldest', 'on', 'once', 'one', 'only', 'open', 'opened', 'opening', 'opens', 'or', 'order', 'ordered', 'ordering', 'orders', 'other', 'others', 'our', 'out', 'over', 'p', 'part', 'parted', 'parting', 'parts', 'per', 'perhaps', 'place', 'places', 'point', 'pointed', 'pointing', 'points', 'possible', 'present', 'presented', 'presenting', 'presents', 'problem', 'problems', 'put', 'puts', 'q', 'quite', 'r', 'rather', 'really', 'right', 'right', 'room', 'rooms', 's', 'said', 'same', 'saw', 'say', 'says', 'second', 'seconds', 'see', 'seem', 'seemed', 'seeming', 'seems', 'sees', 'several', 'shall', 'she', 'should', 'show', 'showed', 'showing', 'shows', 'side', 'sides', 'since', 'small', 'smaller', 'smallest', 'so', 'some', 'somebody', 'someone', 'something', 'somewhere', 'state', 'states', 'still', 'still', 'such', 'sure', 't', 'take', 'taken', 'than', 'that', 'the', 'their', 'them', 'then', 'there', 'therefore', 'these', 'they', 'thing', 'things', 'think', 'thinks', 'this', 'those', 'though', 'thought', 'thoughts', 'three', 'through', 'thus', 'to', 'today', 'together', 'too', 'took', 'toward', 'turn', 'turned', 'turning', 'turns', 'two', 'u', 'under', 'until', 'up', 'upon', 'us', 'use', 'used', 'uses', 'v', 'very', 'w', 'want', 'wanted', 'wanting', 'wants', 'was', 'way', 'ways', 'we', 'well', 'wells', 'went', 'were', 'what', 'when', 'where', 'whether', 'which', 'while', 'who', 'whole', 'whose', 'why', 'will', 'with', 'within', 'without', 'work', 'worked', 'working', 'works', 'would', 'x', 'y', 'year', 'years', 'yet', 'you', 'young', 'younger', 'youngest', 'your', 'yours', 'z']
 nltk_stopwords=list(set(stopwords.words('english')))
@@ -40,7 +42,7 @@ def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt
         try:                                        # To use selected terms of the vocabulary
             print('No of Selected Terms \t'+str(no_of_selected_features)) 
             pipeline = Pipeline([
-                ('vect', CountVectorizer(token_pattern=r'\b\w+\b')),
+                ('vect',CountVectorizer(token_pattern=r'\b\w+\b')),
                 ('tfidf', TfidfTransformer(use_idf=True,smooth_idf=True)),
                 ('feature_selection', SelectKBest(chi2, k=no_of_selected_features)),                         # k=1000 is recommended 
         #        ('feature_selection', SelectKBest(mutual_info_classif, k=self.no_of_selected_features)),        
@@ -51,8 +53,8 @@ def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt
 
 # Fix the values of the parameters using Grid Search and cross validation on the training samples 
     feature_parameters = {
-    'vect__min_df': (2,3),
-    'vect__ngram_range': ((1, 2),(1,3)),  # Unigrams, Bigrams or Trigrams
+    'vect__min_df': [2],#(2,3),
+    'vect__ngram_range': [(1,2)],  # Unigrams, Bigrams or Trigrams ((1, 2),(1,3))
     }
     parameters={**feature_parameters,**clf_parameters} 
     grid = GridSearchCV(pipeline,parameters,scoring='f1_micro',cv=10,verbose=2,n_jobs=num_jobs)          
@@ -60,6 +62,18 @@ def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt
     grid.fit(trn_data,trn_cat)     
     end = time.time()
     clf= grid.best_estimator_  
+    
+    ## Finding Relevant Words
+    importances = clf.named_steps["clf"].feature_importances_
+    importances = np.argsort(importances)[::-1]
+    feature_names = clf.named_steps["vect"].get_feature_names()  
+    # print(feature_names)
+    top_words = []
+
+    for i in range(20):
+        top_words.append(feature_names[importances[i]])
+    print(top_words)
+
     print(f'Time Taken to Fit GridSearch : {end-start}')
     
     model_path = os.path.join('saved_models','tfidf_'+clf_opt)
