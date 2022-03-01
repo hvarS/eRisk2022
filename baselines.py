@@ -178,7 +178,7 @@ def doc2vec_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
     model_path = os.path.join('saved_models','doc2vec_'+clf_opt)
     if not os.path.exists(model_path):
         os.mkdir(model_path)
-    os.chdir(model_path)
+    os.chdir(model_path)    
     flname='doc2vec'+'_'+clf_opt+'_'+str(no_of_selected_features)
 
     joblib.dump(clf, flname+'_clf.joblib')
