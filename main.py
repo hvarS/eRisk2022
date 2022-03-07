@@ -8,6 +8,9 @@ import torch
 import statistics
 import argparse
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
 
 os.environ['CUDA_VISIBLE_DEVICES'] = "2"
 
@@ -81,10 +84,27 @@ for item in predicted:
 class_names = list(Counter(actual_class_labels).keys())
 class_names = [str(x) for x in class_names]
 
-print(type(actual_class_labels[0]),type(predicted_class_labels[0]))
 
 print(classification_report(actual_class_labels,predicted_class_labels,target_names=class_names))
-print(confusion_matrix(actual_class_labels, predicted_class_labels))
+
+cf_matrix = confusion_matrix(actual_class_labels, predicted_class_labels)
+
+#Visualization of Confusion Matrix 
+ax = sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True, 
+            fmt='.2%', cmap='Blues')
+
+ax.set_title('Seaborn Confusion Matrix with labels\n\n');
+ax.set_xlabel('\nPredicted Values')
+ax.set_ylabel('Actual Values ');
+
+## Ticket labels - List must be in alphabetical order
+ax.xaxis.set_ticklabels(['False','True'])
+ax.yaxis.set_ticklabels(['False','True'])
+
+## Display the visualization of the Confusion Matrix.
+fig = ax.get_figure()
+fig.savefig('confusion_matrix_sample.png')
+
 tn, fp, fn, tp = confusion_matrix(actual_class_labels, predicted_class_labels).ravel()
 specificity = tn / (tn+fp)
 print('\n Specifity Score :',str(specificity))
