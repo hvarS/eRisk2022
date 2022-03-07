@@ -104,7 +104,6 @@ ax.yaxis.set_ticklabels(['False','True'])
 fig = ax.get_figure()
 fig.savefig('confusion_matrix_sample.png')
 
-print(predicted_class_labels)
 tn, fp, fn, tp = confusion_matrix(actual_class_labels, predicted_class_labels).ravel()
 specificity = tn / (tn+fp)
 print('\n Specifity Score :',str(specificity))
@@ -118,10 +117,10 @@ print ('\n The Probablity of Confidence of the Classifier: \t'+str(confidence_sc
 for i,actual_label in enumerate(actual_class_labels):
         if actual_label == 1:
                 if predicted_class_labels[i]==1:
-                        with open('predictions/true_positive/text{i}','w') as f:
+                        with open(f'predictions/true_positive/text{i}','w') as f:
                                 f.write(tst_data[i])
                 else:
-                        with open('predictions/false_negative/text{i}','w') as f:
+                        with open(f'predictions/false_negative/text{i}','w') as f:
                                 f.write(tst_data[i])
         else:
                 pass
