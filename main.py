@@ -90,8 +90,7 @@ print(classification_report(actual_class_labels,predicted_class_labels,target_na
 cf_matrix = confusion_matrix(actual_class_labels, predicted_class_labels)
 
 #Visualization of Confusion Matrix 
-ax = sns.heatmap(cf_matrix/np.sum(cf_matrix), annot=True, 
-            fmt='.2%', cmap='Blues')
+ax = sns.heatmap(cf_matrix, annot=True, cmap='Blues')
 
 ax.set_title('Seaborn Confusion Matrix with labels\n\n');
 ax.set_xlabel('\nPredicted Values')
@@ -105,6 +104,7 @@ ax.yaxis.set_ticklabels(['False','True'])
 fig = ax.get_figure()
 fig.savefig('confusion_matrix_sample.png')
 
+print(predicted_class_labels)
 tn, fp, fn, tp = confusion_matrix(actual_class_labels, predicted_class_labels).ravel()
 specificity = tn / (tn+fp)
 print('\n Specifity Score :',str(specificity))
@@ -113,3 +113,15 @@ confidence_score=statistics.mean(probs)-statistics.variance(probs)
 confidence_score=round(confidence_score, 3)
 print ('\n The Probablity of Confidence of the Classifier: \t'+str(confidence_score)+'\n')    
 
+
+#Saving and analyzing classified values:
+for i,actual_label in enumerate(actual_class_labels):
+        if actual_label == 1:
+                if predicted_class_labels[i]==1:
+                        with open('predictions/true_positive/text{i}','w') as f:
+                                f.write(tst_data[i])
+                else:
+                        with open('predictions/false_negative/text{i}','w') as f:
+                                f.write(tst_data[i])
+        else:
+                pass
