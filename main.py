@@ -84,6 +84,7 @@ class_names = [str(x) for x in class_names]
 print(type(actual_class_labels[0]),type(predicted_class_labels[0]))
 
 print(classification_report(actual_class_labels,predicted_class_labels,target_names=class_names))
+print(confusion_matrix(actual_class_labels, predicted_class_labels))
 tn, fp, fn, tp = confusion_matrix(actual_class_labels, predicted_class_labels).ravel()
 specificity = tn / (tn+fp)
 print('\n Specifity Score :',str(specificity))
