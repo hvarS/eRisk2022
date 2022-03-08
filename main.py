@@ -1,4 +1,4 @@
-from dataset import PathologicalGamblingDataset
+from dataset import DepressionDataset, PathologicalGamblingDataset
 import os 
 from sklearn.model_selection._split import StratifiedKFold
 from models import ModelSelection 
@@ -32,7 +32,7 @@ parser.add_argument('--model_name', metavar='T', type=str, default='bert-base-un
 args = parser.parse_args()
 
 ############### Preparing Data ##################
-dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
+dataset = DepressionDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
 trn_data,trn_cat= dataset.get_data()
 
 ############### Debugging on small dataset ###### 
