@@ -3,8 +3,7 @@ import os
 import xml.etree.ElementTree as ET
 import re
 from tqdm import tqdm
-import csv
-import glob
+import sys
 
 task1_loc = 'task1_data'
 task1_training_loc = 't1_training/TRAINING_DATA/2021_cases'
@@ -132,8 +131,8 @@ class DepressionDataset(Dataset):
                         # row['id'] = idn
                         trn_dict[idn]=[]
                     else:
-                        if child[2].text!=None:
-                            text=child[2].text
+                        if child[3].text!=None:
+                            text=child[3].text
                             text=text.strip(' ').strip('\n')
                             text=text.replace('Repost','')
                             text=re.sub(r'\n', ' ', text)

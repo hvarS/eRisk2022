@@ -34,7 +34,6 @@ args = parser.parse_args()
 ############### Preparing Data ##################
 dataset = DepressionDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
 trn_data,trn_cat= dataset.get_data()
-
 ############### Debugging on small dataset ###### 
 # trn_data,trn_cat = trn_data[:500],trn_cat[:500]
 
