@@ -55,7 +55,7 @@ for sent in corpus:
 
 external_dict_tp = dict(sorted(voc.word2count.items(), key=lambda item: item[1],reverse=True))
 # print('top 20 true positive words :: ',external_dict)
-
+print(voc.num_words)
 del voc 
 
 voc = Vocabulary('pathological_gambling_false_negative')
@@ -68,6 +68,7 @@ for filename in glob.glob('predictions/false_negative/*'):
 
 for sent in corpus:
   voc.add_sentence(sent)
+
 
 external_dict_fn = dict(sorted(voc.word2count.items(), key=lambda item: item[1],reverse=True))
 # print('top 20 false negative words :: ',external_dict)
