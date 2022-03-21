@@ -20,4 +20,6 @@ for filename in glob.glob('predictions/*/*'):
 X = vec.fit_transform(corpus)
 df = pd.DataFrame(X.toarray(), columns=vec.get_feature_names(),index = filenames)
 df['LABEL'] = labels
-print(df.head())
+
+# df.to_excel('term_document_matrix.xlsx')
+df.to_csv('term_document_matrix.csv')
