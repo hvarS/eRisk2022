@@ -2,6 +2,7 @@ from torch.utils.data import Dataset
 import os 
 import xml.etree.ElementTree as ET
 import re
+import pandas as pd
 from tqdm import tqdm
 import sys
 
@@ -11,10 +12,11 @@ task2_loc = 'task2_data'
 task2_training_loc = 't2_training/TRAINING_DATA'
 
 class PathologicalGamblingDataset(Dataset):
-    def __init__(self,path,fpath):
+    def __init__(self,path,fpath,args):
         super(PathologicalGamblingDataset,self).__init__()
         self.path = path
         self.fpath = fpath
+        self.subreddit = args.subreddit
         self.trn_data,self.trn_cat=self.get_training_data()
     
     def get_data(self):
@@ -41,6 +43,13 @@ class PathologicalGamblingDataset(Dataset):
                 golden_truths[idn].append(label)
         
         trn_data=[]; trn_cat=[];  trn_dict={}
+        if self.subreddit:
+            reddit = pd.read_csv('RedditExtract/GamblingAddiction_posts.csv')
+            reddit = reddit.dropna()
+            subreddit_data = list(reddit['title']+reddit['selftext'])
+            subreddit_cat = [1 for _ in range(len(subreddit_data))]
+            trn_data += subreddit_data
+            trn_cat += subreddit_cat
         trn_files=os.listdir(os.path.join(training_loc,'data'))
 
         for file in tqdm(trn_files):
@@ -82,6 +91,7 @@ class PathologicalGamblingDataset(Dataset):
         #     writer = csv.DictWriter(csvfile, fieldnames=field_names)
         #     writer.writeheader()
         #     writer.writerows(saving_dictionary)
+        
         return trn_data, trn_cat
 
 
