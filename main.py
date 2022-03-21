@@ -26,6 +26,7 @@ parser.add_argument('--fpath', metavar='F', type=str, default='task1_data',
                     help='data folder name ')
 parser.add_argument('--model_name', metavar='T', type=str, default='bert-base-uncased',
                     help='name of the huggingface transformer')
+parser.add_argument('--subreddit', action='store_true',default=False)
 args = parser.parse_args()
 
 ############### Preparing Data ##################

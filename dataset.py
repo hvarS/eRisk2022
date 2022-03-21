@@ -2,6 +2,7 @@ from torch.utils.data import Dataset
 import os 
 import xml.etree.ElementTree as ET
 import re
+import pandas as pd
 from tqdm import tqdm
 import csv
 
@@ -9,11 +10,12 @@ task1_loc = 'task1_data'
 task1_training_loc = 't1_training/TRAINING_DATA/2021_cases'
 
 class PathologicalGamblingDataset(Dataset):
-    def __init__(self,path,fpath):
+    def __init__(self,path,fpath,args):
         super(PathologicalGamblingDataset,self).__init__()
         self.path = path
         self.fpath = fpath
         self.trn_data,self.trn_cat=self.get_training_data()
+        self.args = args 
     
     def get_data(self):
         return self.trn_data,self.trn_cat
@@ -80,6 +82,13 @@ class PathologicalGamblingDataset(Dataset):
         #     writer = csv.DictWriter(csvfile, fieldnames=field_names)
         #     writer.writeheader()
         #     writer.writerows(saving_dictionary)
+        if self.args.subreddit:
+            reddit = pd.read_csv('RedditExtract/GamblingAddiction_posts.csv')
+            reddit = reddit.dropna()
+            subreddit_data = list(reddit['title']+reddit['selftext'])
+            subreddit_cat = [1 for _ in range(subreddit_data)]
+            trn_data += subreddit_data
+            trn_cat += subreddit_cat
         return trn_data, trn_cat
 
 

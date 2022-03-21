@@ -11,3 +11,4 @@ TransformerResults
 transformerLogs
 training.csv
 trial.ipynb
+RedditExtract/*.csv
