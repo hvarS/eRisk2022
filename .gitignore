@@ -4,6 +4,7 @@ __pycache__
 logs
 bert_model
 task1_data/*
+task2_data/*
 saved_models/*
 *.pyc
 checkpoints/*
@@ -12,3 +13,4 @@ transformerLogs
 training.csv
 trial.ipynb
 RedditExtract/*.csv
+predictions

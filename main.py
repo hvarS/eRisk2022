@@ -1,4 +1,4 @@
-from dataset import PathologicalGamblingDataset
+from dataset import DepressionDataset, PathologicalGamblingDataset
 import os 
 from sklearn.model_selection._split import StratifiedKFold
 from models import ModelSelection 
@@ -8,6 +8,9 @@ import torch
 import statistics
 import argparse
 from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
 
 os.environ['CUDA_VISIBLE_DEVICES'] = "2"
 
@@ -32,7 +35,6 @@ args = parser.parse_args()
 ############### Preparing Data ##################
 dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
 trn_data,trn_cat= dataset.get_data()
-
 ############### Debugging on small dataset ###### 
 # trn_data,trn_cat = trn_data[:500],trn_cat[:500]
 
@@ -82,9 +84,26 @@ for item in predicted:
 class_names = list(Counter(actual_class_labels).keys())
 class_names = [str(x) for x in class_names]
 
-print(type(actual_class_labels[0]),type(predicted_class_labels[0]))
 
 print(classification_report(actual_class_labels,predicted_class_labels,target_names=class_names))
+
+cf_matrix = confusion_matrix(actual_class_labels, predicted_class_labels)
+
+#Visualization of Confusion Matrix 
+ax = sns.heatmap(cf_matrix, annot=True, cmap='Blues')
+
+ax.set_title('Seaborn Confusion Matrix with labels\n\n');
+ax.set_xlabel('\nPredicted Values')
+ax.set_ylabel('Actual Values ');
+
+## Ticket labels - List must be in alphabetical order
+ax.xaxis.set_ticklabels(['False','True'])
+ax.yaxis.set_ticklabels(['False','True'])
+
+## Display the visualization of the Confusion Matrix.
+fig = ax.get_figure()
+fig.savefig('confusion_matrix_sample.png')
+
 tn, fp, fn, tp = confusion_matrix(actual_class_labels, predicted_class_labels).ravel()
 specificity = tn / (tn+fp)
 print('\n Specifity Score :',str(specificity))
@@ -93,3 +112,15 @@ confidence_score=statistics.mean(probs)-statistics.variance(probs)
 confidence_score=round(confidence_score, 3)
 print ('\n The Probablity of Confidence of the Classifier: \t'+str(confidence_score)+'\n')    
 
+
+#Saving and analyzing classified values:
+for i,actual_label in enumerate(actual_class_labels):
+        if actual_label == 1:
+                if predicted_class_labels[i]==1:
+                        with open(f'predictions/true_positive/text{i}','w') as f:
+                                f.write(tst_data[i])
+                else:
+                        with open(f'predictions/false_negative/text{i}','w') as f:
+                                f.write(tst_data[i])
+        else:
+                pass

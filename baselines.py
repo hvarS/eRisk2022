@@ -64,15 +64,15 @@ def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt
     clf= grid.best_estimator_  
     
     ## Finding Relevant Words
-    importances = clf.named_steps["clf"].feature_importances_
-    importances = np.argsort(importances)[::-1]
-    feature_names = clf.named_steps["vect"].get_feature_names()  
-    # print(feature_names)
-    top_words = []
+    # importances = clf.named_steps["clf"].feature_importances_
+    # importances = np.argsort(importances)[::-1]
+    # feature_names = clf.named_steps["vect"].get_feature_names()  
+    # # print(feature_names)
+    # top_words = []
 
-    for i in range(20):
-        top_words.append(feature_names[importances[i]])
-    print(top_words)
+    # for i in range(20):
+    #     top_words.append(feature_names[importances[i]])
+    # print(top_words)
 
     print(f'Time Taken to Fit GridSearch : {end-start}')
     
