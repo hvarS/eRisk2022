@@ -31,10 +31,10 @@ parser.add_argument('--model_name', metavar='T', type=str, default='bert-base-un
                     help='name of the huggingface transformer')
 parser.add_argument('--subreddit', action='store_true',default=False)
 args = parser.parse_args()
-
 ############### Preparing Data ##################
-dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
+dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath,args)
 trn_data,trn_cat= dataset.get_data()
+print(len(trn_data),len(trn_cat))
 ############### Debugging on small dataset ###### 
 # trn_data,trn_cat = trn_data[:500],trn_cat[:500]
 
@@ -114,13 +114,13 @@ print ('\n The Probablity of Confidence of the Classifier: \t'+str(confidence_sc
 
 
 #Saving and analyzing classified values:
-for i,actual_label in enumerate(actual_class_labels):
-        if actual_label == 1:
-                if predicted_class_labels[i]==1:
-                        with open(f'predictions/true_positive/text{i}','w') as f:
-                                f.write(tst_data[i])
-                else:
-                        with open(f'predictions/false_negative/text{i}','w') as f:
-                                f.write(tst_data[i])
-        else:
-                pass
+# for i,actual_label in enumerate(actual_class_labels):
+#         if actual_label == 1:
+#                 if predicted_class_labels[i]==1:
+#                         with open(f'predictions/true_positive/text{i}','w') as f:
+#                                 f.write(tst_data[i])
+#                 else:
+#                         with open(f'predictions/false_negative/text{i}','w') as f:
+#                                 f.write(tst_data[i])
+#         else:
+#                 pass

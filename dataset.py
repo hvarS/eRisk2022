@@ -16,8 +16,8 @@ class PathologicalGamblingDataset(Dataset):
         super(PathologicalGamblingDataset,self).__init__()
         self.path = path
         self.fpath = fpath
+        self.subreddit = args.subreddit
         self.trn_data,self.trn_cat=self.get_training_data()
-        self.args = args 
     
     def get_data(self):
         return self.trn_data,self.trn_cat
@@ -43,6 +43,13 @@ class PathologicalGamblingDataset(Dataset):
                 golden_truths[idn].append(label)
         
         trn_data=[]; trn_cat=[];  trn_dict={}
+        if self.subreddit:
+            reddit = pd.read_csv('RedditExtract/GamblingAddiction_posts.csv')
+            reddit = reddit.dropna()
+            subreddit_data = list(reddit['title']+reddit['selftext'])
+            subreddit_cat = [1 for _ in range(len(subreddit_data))]
+            trn_data += subreddit_data
+            trn_cat += subreddit_cat
         trn_files=os.listdir(os.path.join(training_loc,'data'))
 
         for file in tqdm(trn_files):
@@ -84,13 +91,7 @@ class PathologicalGamblingDataset(Dataset):
         #     writer = csv.DictWriter(csvfile, fieldnames=field_names)
         #     writer.writeheader()
         #     writer.writerows(saving_dictionary)
-        if self.args.subreddit:
-            reddit = pd.read_csv('RedditExtract/GamblingAddiction_posts.csv')
-            reddit = reddit.dropna()
-            subreddit_data = list(reddit['title']+reddit['selftext'])
-            subreddit_cat = [1 for _ in range(subreddit_data)]
-            trn_data += subreddit_data
-            trn_cat += subreddit_cat
+        
         return trn_data, trn_cat
 
 
