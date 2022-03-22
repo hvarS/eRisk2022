@@ -16,3 +16,4 @@ predictions
 *term_document_matrix*.csv
 RedditExtract/*.csv
 predictions
+pymm
