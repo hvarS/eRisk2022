@@ -1,6 +1,5 @@
-from pyexpat import model
 from sklearn.pipeline import Pipeline
-from sklearn.feature_extraction.text import CountVectorizer,TfidfTransformer
+from sklearn.feature_extraction.text import CountVectorizer,TfidfTransformer,TfidfVectorizer
 from sklearn.feature_selection import SelectKBest,chi2
 from sklearn.model_selection import GridSearchCV 
 import sys
@@ -27,6 +26,56 @@ path = os.getcwd()
 
 if not os.path.exists(os.path.join(path,'saved_models')):
     os.mkdir(os.path.join(path,'saved_models'))
+
+
+def no_pipeline_tfidf(trn_data,trn_cat,valid_data,trn_features,valid_features,no_of_selected_features = None,clf_opt = 'ab',num_jobs = 1):
+    print('\n ***** Building No Pipeline TFIDF Based Training Model ***** \n')         
+    clf,clf_parameters,ext2= classification_pipeline(clf_opt)
+                                        # To use selected terms of the vocabulary
+    print('No of Selected Terms \t'+str(no_of_selected_features)) 
+    vectorizer = TfidfVectorizer(token_pattern=r'\b\w+\b')
+    x = vectorizer.fit_transform(trn_data)
+    selector = SelectKBest(chi2, k=no_of_selected_features)
+    x = selector.fit_transform(x, trn_cat).toarray()
+    trn_data = np.append(x,trn_features,1)
+    clf.fit(trn_data,trn_cat)
+
+    x_valid = vectorizer.transform(valid_data)
+    x_valid = selector.transform(x_valid).toarray()
+    valid_data = np.append(x_valid,np.array(valid_features),1)
+    return clf,valid_data
+
+def no_pipeline_entropy(trn_data,trn_cat,valid_data,trn_features,valid_features,no_of_selected_features = None,clf_opt = 'ab',num_jobs = 1):
+    print('\n ***** Building No Pipeline Entropy Based Training Model ***** \n')
+    print('No of Selected Terms \t'+str(no_of_selected_features)) 
+    trn_vec=[]; trn_docs=[]; 
+    print('Tokenizing training dataset ')
+    for doc in tqdm(trn_data):
+        doc=nltk.word_tokenize(doc.lower())
+        doc = [word for word in doc if word not in en_stopwords]
+        trn_docs.append(doc)                       # Training docs broken into words
+    trn_dct = Dictionary(trn_docs)
+    corpus = [trn_dct.doc2bow(row) for row in trn_docs]
+    trn_model = LogEntropyModel(corpus)
+    no_of_terms=len(trn_dct.keys())
+    print('\n Number of Terms in the Vocabulary\t'+str(no_of_terms)+'\n')
+    for i,item in enumerate(corpus):
+        vec=[0]*no_of_terms                                 # Empty vector of terms for a document
+        vector = trn_model[item]                            # LogEntropy Vectors
+        for elm in vector:
+            vec[elm[0]]=elm[1]
+        vec.extend(trn_features[i])
+        trn_vec.append(vec)
+    clf,clf_parameters,ext2=classification_pipeline(clf_opt) 
+
+    selector = SelectKBest(chi2, k=no_of_selected_features)
+    scaler = StandardScaler()
+
+    trn_vec = selector.fit_transform(trn_vec, trn_cat).toarray()
+    trn_vec = scaler.fit_transform(trn_vec)
+    clf.fit(trn_vec,trn_cat)
+
+    
 
 
 # TFIDF model    
