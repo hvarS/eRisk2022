@@ -28,11 +28,21 @@ if not os.path.exists(os.path.join(path,'saved_models')):
     os.mkdir(os.path.join(path,'saved_models'))
 
 
+def metamap_only(trn_cat,trn_features,clf_opt = 'ab'):
+    print('\n ***** Building Metamap Feature Based Training Model ***** \n')         
+    clf,clf_parameters,ext2= classification_pipeline(clf_opt)
+    trn_data = trn_features
+    clf.fit(trn_data,trn_cat)
+    return clf
+
+
+
 def no_pipeline_tfidf(trn_data,trn_cat,valid_data,trn_features,valid_features,no_of_selected_features = None,clf_opt = 'ab',num_jobs = 1):
     print('\n ***** Building No Pipeline TFIDF Based Training Model ***** \n')         
     clf,clf_parameters,ext2= classification_pipeline(clf_opt)
                                         # To use selected terms of the vocabulary
     print('No of Selected Terms \t'+str(no_of_selected_features)) 
+    
     vectorizer = TfidfVectorizer(token_pattern=r'\b\w+\b')
     x = vectorizer.fit_transform(trn_data)
     selector = SelectKBest(chi2, k=no_of_selected_features)

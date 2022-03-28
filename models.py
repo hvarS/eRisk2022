@@ -1,4 +1,4 @@
-from baselines import no_pipeline_entropy, no_pipeline_tfidf, tfidf_training_model,doc2vec_training_model,entropy_training_model
+from baselines import metamap_only, no_pipeline_entropy, no_pipeline_tfidf, tfidf_training_model,doc2vec_training_model,entropy_training_model
 # from bert import bert_training_model, bert_validate
 import os
 import joblib
@@ -8,7 +8,7 @@ from tqdm import tqdm
 
 
 class ModelSelection(object):
-    def __init__(self,model = 'entropy',clf_opt = 'ab',num_features = None,num_jobs = 1,model_name = 'bert-base-uncased',metamap = False) -> None:
+    def __init__(self,model = 'entropy',clf_opt = 'ab',num_features = None,num_jobs = 1,model_name = 'bert-base-uncased',metamap = False,force_train = False,metamap_only = False) -> None:
         self.model = model
         self.opt = clf_opt
         self.num_features  = num_features
@@ -16,8 +16,10 @@ class ModelSelection(object):
         self.num_jobs = num_jobs    
         self.model_name = model_name
         self.metamap = metamap
+        self.force_train = force_train
+        self.metamap_only = metamap_only
         self.check_path = os.path.join(os.getcwd(),'saved_models',model+'_'+clf_opt,model+'_'+clf_opt+'_'+str(num_features)+'_clf.joblib')
-        if not os.path.exists(self.check_path):
+        if (not os.path.exists(self.check_path) or self.force_train):
             self.save = True
         if not self.save:
             print('Loading Pretrained ',model,' Model')
@@ -27,13 +29,18 @@ class ModelSelection(object):
         self.predicted = [0 for _ in range(0,len(x_valid))]                
         tst_vec=[]; tst_docs=[]
 
-        if self.model == 'tfidf':
+        if self.metamap_only:
+            # print(len(y_train),str(len(metamap_features_trn))+','+str(len(metamap_features_trn[0])))
+            clf = metamap_only(y_train,metamap_features_trn,self.opt)
+            predicted = clf.predict(metamap_features_valid)
+            predicted_probability = clf.predict_proba(metamap_features_valid)
+
+        elif self.model == 'tfidf':
             if self.save:
                 if not self.metamap:
                     clf,_=tfidf_training_model(x_train,y_train,self.num_features,self.opt,self.num_jobs)
                 else:
                     clf,x_valid=no_pipeline_tfidf(x_train,y_train,x_valid,metamap_features_trn,metamap_features_valid,self.num_features,self.opt,self.num_jobs)
-                    print(x_valid.shape)
                     predicted = clf.predict(x_valid)
                     predicted_probability = clf.predict_proba(x_valid)
             else:

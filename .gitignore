@@ -17,3 +17,4 @@ predictions
 RedditExtract/*.csv
 predictions
 pymm
+training.pkl

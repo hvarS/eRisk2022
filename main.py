@@ -31,6 +31,8 @@ parser.add_argument('--model_name', metavar='T', type=str, default='bert-base-un
                     help='name of the huggingface transformer')
 parser.add_argument('--subreddit', action='store_true',default=False)
 parser.add_argument('--metamap', action='store_true',default=False)
+parser.add_argument('--force_train', action='store_true',default=False)
+parser.add_argument('--metamap_only',action ='store_true',default = False)
 args = parser.parse_args()
 ############### Preparing Data ##################
 dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath,args)
@@ -46,7 +48,7 @@ print(len(trn_data),len(trn_cat))
 option = args.model
 clf_opt = args.clf
 num_features = args.features
-model = ModelSelection(option,clf_opt,num_features,args.jobs,model_name=args.model_name,metamap = args.metamap)
+model = ModelSelection(option,clf_opt,num_features,args.jobs,model_name=args.model_name,metamap = args.metamap,force_train=args.force_train,metamap_only=args.metamap_only)
 
 ############### KFold Cross Validation ##########
 skf = StratifiedKFold(n_splits=10)
