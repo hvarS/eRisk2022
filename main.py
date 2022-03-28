@@ -4,7 +4,7 @@ from sklearn.model_selection._split import StratifiedKFold
 from models import ModelSelection 
 from sklearn.metrics import classification_report,confusion_matrix
 from collections import Counter
-import torch
+# import torch
 import statistics
 import argparse
 from sklearn.model_selection import train_test_split
@@ -30,10 +30,14 @@ parser.add_argument('--fpath', metavar='F', type=str, default='task1_data',
 parser.add_argument('--model_name', metavar='T', type=str, default='bert-base-uncased',
                     help='name of the huggingface transformer')
 parser.add_argument('--subreddit', action='store_true',default=False)
+parser.add_argument('--metamap', action='store_true',default=False)
 args = parser.parse_args()
 ############### Preparing Data ##################
 dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath,args)
-trn_data,trn_cat= dataset.get_data()
+if not args.metamap:
+        trn_data,trn_cat,trn_vect= dataset.get_data()
+else:
+        trn_data,trn_cat,trn_vect = dataset.get_data()
 print(len(trn_data),len(trn_cat))
 ############### Debugging on small dataset ###### 
 # trn_data,trn_cat = trn_data[:500],trn_cat[:500]
@@ -42,7 +46,7 @@ print(len(trn_data),len(trn_cat))
 option = args.model
 clf_opt = args.clf
 num_features = args.features
-model = ModelSelection(option,clf_opt,num_features,args.jobs,model_name=args.model_name)
+model = ModelSelection(option,clf_opt,num_features,args.jobs,model_name=args.model_name,metamap = args.metamap)
 
 ############### KFold Cross Validation ##########
 skf = StratifiedKFold(n_splits=10)
@@ -68,13 +72,20 @@ predicted_class_labels=[]; actual_class_labels=[]; count=0; probs=[];
 #         predicted_class_labels.append(item)
 
 ## Result Verification
-trn_data, tst_data, trn_cat, tst_cat = train_test_split(trn_data, trn_cat, test_size=0.30, random_state=42,stratify=trn_cat)   
-predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data) 
+if args.metamap:
+        trn_data, tst_data, trn_cat, tst_cat,trn_metamap,tst_metamap = train_test_split(trn_data, trn_cat,trn_vect, test_size=0.30, random_state=42,stratify=trn_cat)   
+        predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data,trn_metamap,tst_metamap) 
+else:
+        trn_data, tst_data, trn_cat, tst_cat = train_test_split(trn_data, trn_cat,test_size=0.30, random_state=42,stratify=trn_cat) 
+        predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data) 
+
+# for item in predicted_probability:
+#         if torch.is_tensor(item):
+#                 probs.append(float(torch.max(item)))
+#         else:
+#                 probs.append(float(max(item)))
 for item in predicted_probability:
-        if torch.is_tensor(item):
-                probs.append(float(torch.max(item)))
-        else:
-                probs.append(float(max(item)))
+        probs.append(float(max(item)))
 for item in tst_cat:
         actual_class_labels.append(item)
 for item in predicted:

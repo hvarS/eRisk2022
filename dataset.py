@@ -1,4 +1,4 @@
-from torch.utils.data import Dataset
+import pickle
 import os 
 import xml.etree.ElementTree as ET
 import re
@@ -11,19 +11,34 @@ task1_training_loc = 't1_training/TRAINING_DATA/2021_cases'
 task2_loc = 'task2_data'
 task2_training_loc = 't2_training/TRAINING_DATA'
 
-class PathologicalGamblingDataset(Dataset):
+class PathologicalGamblingDataset(object):
     def __init__(self,path,fpath,args):
         super(PathologicalGamblingDataset,self).__init__()
         self.path = path
         self.fpath = fpath
         self.subreddit = args.subreddit
-        self.trn_data,self.trn_cat=self.get_training_data()
+        self.metamap = args.metamap
+        self.trn_data,self.trn_cat,self.trn_vect=self.get_training_data()
     
     def get_data(self):
-        return self.trn_data,self.trn_cat
+        if not self.metamap:
+            return self.trn_data,self.trn_cat,[]
+        else:
+            return self.trn_data,self.trn_cat,self.trn_vect
 
     def get_training_data(self):
         print('\n ***** Reading Training Data ***** \n')
+
+        if self.metamap:
+            f = pickle.load(open('training.pkl','rb'))
+            trn_data = []
+            trn_cat = []
+            trn_vect = []
+            for _,value in f.items():
+                trn_data.append(value['text'])
+                trn_cat.append(value['label'])
+                trn_vect.append(value['vector'])
+            return trn_data,trn_cat,trn_vect
 
         training_loc = os.path.join(self.path,self.fpath,task1_training_loc)
         golden_truth_path = os.path.join(self.path,self.fpath,task1_training_loc,'risk_golden_truth.txt')
@@ -95,7 +110,7 @@ class PathologicalGamblingDataset(Dataset):
         return trn_data, trn_cat
 
 
-class DepressionDataset(Dataset):
+class DepressionDataset(object):
     def __init__(self,path,fpath):
         super(DepressionDataset,self).__init__()
         self.path = path

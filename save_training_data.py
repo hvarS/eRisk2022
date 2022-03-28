@@ -1,65 +1,29 @@
-from pymm.src.pymm import Metamap
-import glob
-from tqdm import tqdm
 import os 
-import sys
-import pandas as pd
 import xml.etree.ElementTree as ET
 import re
-import nltk
-from nltk.corpus import stopwords
-from nltk.tokenize import word_tokenize, sent_tokenize
-import pickle
-from pymm.src.pymm.pymm import MetamapStuck
-
-mm = Metamap('../../IISER/public_mm/bin/metamap')
-mappings = {'acab':0,'dsyn':1,'menp':2,'mobd':3,'sosy':4}
-stop_words = set(stopwords.words('english'))
-tags = ['NN', 'NNS', 'NNP' ,'NNPS','JJ' ,'JJS','JJR','VB','VBZ','VBD','VBG','VBN','VBP']
-
+import pandas as pd
+from tqdm import tqdm
 import sys
-def get_metamap_vector(sent):
-  vector = [0 for _ in range(5)]
-  try:
-    mmos = mm.parse([sent[:1000]],timeout=10)
-    for idx, mmo in enumerate(mmos):
-      for jdx, concept in enumerate(mmo):
-        # print (concept.cui, concept.score, concept.matched)
-        # print (concept.semtypes, concept.ismapping)
-        c = concept.semtypes[0] 
-        if c in mappings:
-          vector[mappings[c]] = 1
-  except MetamapStuck:
-    print(sent)
-    pass
-  return vector
-
-def filter_nav(text): 
-  tokenized = nltk.word_tokenize(text)
-  wordsList = [w for w in tokenized if not w in stop_words]
-  tagged = nltk.pos_tag(wordsList)
-  filtered_words = [word for word,tag in tagged if tag in tags]
-  return ' '.join(filtered_words)
-
+import pickle
 
 task1_loc = 'task1_data'
 task1_training_loc = 't1_training/TRAINING_DATA/2021_cases'
 task2_loc = 'task2_data'
 task2_training_loc = 't2_training/TRAINING_DATA'
 
-class ExtractMetaMap(object):
+class CreateDataset(object):
     def __init__(self,path,fpath):
-        super(ExtractMetaMap,self).__init__()
+        super(CreateDataset,self).__init__()
         self.path = path
         self.fpath = fpath
-        self.get_vectors()
+        self.saver()
     
-    def get_vectors(self):
+    def saver(self):
         print('\n ***** Reading Training Data ***** \n')
 
         training_loc = os.path.join(self.path,self.fpath,task1_training_loc)
         golden_truth_path = os.path.join(self.path,self.fpath,task1_training_loc,'risk_golden_truth.txt')
-        
+        vectors = pickle.load(open('metamap_vectors.pkl','rb'))
         # saving_dictionary = []
 
         fl=open(golden_truth_path, 'r')  
@@ -73,8 +37,9 @@ class ExtractMetaMap(object):
                 label=item.split(' ')[1].rstrip('\n')
                 golden_truths[idn]=[]
                 golden_truths[idn].append(label)
+        
         trn_data=[]; trn_cat=[];  trn_dict={}
-        vector_dict = {}        
+        
         trn_files=os.listdir(os.path.join(training_loc,'data'))
 
         for file in tqdm(trn_files):
@@ -88,7 +53,7 @@ class ExtractMetaMap(object):
                     if child.tag=='ID':
                         idn=child.text.strip(' ')
                         # row['id'] = idn
-                        trn_dict[idn]=[]
+                        trn_dict[idn]={}
                     else:
                         if child[2].text!=None:
                             text=child[2].text
@@ -103,19 +68,22 @@ class ExtractMetaMap(object):
                 all_text=re.sub(r'\\', r'', all_text)
                 all_text=re.sub(r'[\s]+', ' ', all_text)                    
                 all_text=re.sub(r'([,;.]+)([\s]*)([.])', r'\3', all_text)
-                all_text=re.sub(r'([?!])([\s]*)([.])', r'\1', all_text)       
+                all_text=re.sub(r'([?!])([\s]*)([.])', r'\1', all_text)                      
                 # row['text'] = all_text
-                vector_dict[idn] = get_metamap_vector(all_text)
+                trn_dict[idn]['text'] = all_text
                 # row['label'] = int(golden_truths[idn][0])
+                trn_dict[idn]['label'] = int(golden_truths[idn][0])
+                trn_dict[idn]['vector'] = vectors[idn]
+                trn_data.append(all_text)
+                trn_cat.append(int(golden_truths[idn][0]))
                 # saving_dictionary.append(row)
         # field_names = ['id','text','label']
         # with open('training.csv', 'w') as csvfile:
         #     writer = csv.DictWriter(csvfile, fieldnames=field_names)
         #     writer.writeheader()
         #     writer.writerows(saving_dictionary)
-        with open('vectors.pkl','wb') as f:
-          pickle.dump(vector_dict,f)
-        
+        with open('training.pkl','wb') as f:
+            pickle.dump(trn_dict,f)
         
 
-ExtractMetaMap(os.path.join(os.getcwd(),''),'task1_data')
+CreateDataset(os.path.join(os.getcwd(),''),'task1_data')
