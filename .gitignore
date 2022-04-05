@@ -5,6 +5,7 @@ logs
 bert_model
 task1_data/*
 task2_data/*
+task3_data/*
 saved_models/*
 *.pyc
 checkpoints/*
