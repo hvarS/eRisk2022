@@ -110,7 +110,7 @@ class PathologicalGamblingDataset(object):
         #     writer.writeheader()
         #     writer.writerows(saving_dictionary)
         
-        return trn_data, trn_cat
+        return trn_data, trn_cat,[]
 
 
 class DepressionDataset(object):
