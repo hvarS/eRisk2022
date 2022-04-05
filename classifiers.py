@@ -59,7 +59,7 @@ def classification_pipeline(opt = 'ab'):
         ext2='svm'
         clf = svm.SVC(kernel='linear', class_weight='balanced',probability=True)  
         clf_parameters = {
-        'clf__C':(0.1,1,5,10,50,100),
+        'clf__C':(10,100)#0.1,1,5,10,50,100),
         }
     else:
         print('Select a valid classifier \n')
