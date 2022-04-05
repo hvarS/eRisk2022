@@ -180,7 +180,7 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
         except:                                  # If the input is wrong
             print('Wrong Input. Enter number of terms correctly. \n')
             sys.exit()
-    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=5,verbose = -1,n_jobs = num_jobs) 
+    grid = GridSearchCV(pipeline,clf_parameters,scoring='f1_micro',cv=5,verbose = 2,n_jobs = num_jobs) 
     start = time.time()
     grid.fit(trn_vec,trn_cat)     
     end = time.time()
