@@ -192,10 +192,10 @@ class AnorexiaDataset(object):
         super(AnorexiaDataset,self).__init__()
         self.path = path
         self.fpath = fpath
-        self.trn_data,self.trn_cat=self.get_training_data()
+        self.trn_data,self.trn_cat,self.trn_vec=self.get_training_data()
     
     def get_data(self):
-        return self.trn_data,self.trn_cat
+        return self.trn_data,self.trn_cat,self.trn_vec
 
     def get_training_data(self):
         print('\n ***** Reading Training Data ***** \n')
@@ -210,28 +210,29 @@ class AnorexiaDataset(object):
         fl.close()
         golden_truths={}; unique_id=[]
         for item in reader:
-            idn=item.split(' ')[0]
+            idn=item.split()[0]
             if idn not in unique_id:
                 unique_id.append(idn)
-                label=item.split(' ')[1].rstrip('\n')
+                label=item.split()[1].rstrip('\n')
                 golden_truths[idn]=[]
                 golden_truths[idn].append(label)
         
         trn_data=[]; trn_cat=[];  trn_dict={}
-        trn_files=glob.glob(os.path.join(training_loc,'positive_examples/chunk*/*'))
-        print(trn_files)
-        sys.exit(0)
+        trn_files=sorted(glob.glob(os.path.join(training_loc,'positive_examples/chunk*/*'))+glob.glob(os.path.join(training_loc,'negative_examples/chunk*/*')))
         for file in tqdm(trn_files):
             # row = {}
             if file.find('.xml')>0:
 #                print('Processing Training File: '+file)
-                tree = ET.parse(os.path.join(training_loc,'data',file))
+                tree = ET.parse(file)
                 root = tree.getroot() 
+                
                 all_text='' 
                 for child in root:
+                    
                     if child.tag=='ID':
                         idn=child.text.strip(' ')
                         # row['id'] = idn
+                        
                         trn_dict[idn]=[]
                     else:
                         if child[3].text!=None:
@@ -260,6 +261,6 @@ class AnorexiaDataset(object):
         #     writer = csv.DictWriter(csvfile, fieldnames=field_names)
         #     writer.writeheader()
         #     writer.writerows(saving_dictionary)
-        return trn_data, trn_cat
+        return trn_data, trn_cat,[]
     
 

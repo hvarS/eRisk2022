@@ -1,4 +1,4 @@
-from dataset import DepressionDataset, PathologicalGamblingDataset
+from dataset import AnorexiaDataset, DepressionDataset, PathologicalGamblingDataset
 import os 
 from sklearn.model_selection._split import StratifiedKFold
 from models import ModelSelection 
@@ -15,6 +15,8 @@ import seaborn as sns
 os.environ['CUDA_VISIBLE_DEVICES'] = "2"
 
 parser = argparse.ArgumentParser(description='eRisk2022')
+parser.add_argument('--task', metavar='T', type=int, default=1,
+                    help=' select which task to train/eval')
 parser.add_argument('--model', metavar='M', type=str, default='entropy',
                     help=' select base model from tfidf,doc2vec,entropy')
 parser.add_argument('--clf', metavar='O', type=str, default='svm',
@@ -35,12 +37,19 @@ parser.add_argument('--force_train', action='store_true',default=False)
 parser.add_argument('--metamap_only',action ='store_true',default = False)
 args = parser.parse_args()
 ############### Preparing Data ##################
-dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath,args)
+args.fpath = 'task{}_data/'.format(args.task)
+if args.task==1:       
+        dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath,args)
+elif args.task==2:
+        dataset = DepressionDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
+elif args.task==3:
+        dataset = AnorexiaDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
 if not args.metamap:
         trn_data,trn_cat,trn_vect= dataset.get_data()
 else:
         trn_data,trn_cat,trn_vect = dataset.get_data()
 print(len(trn_data),len(trn_cat))
+print(trn_data)
 ############### Debugging on small dataset ###### 
 # trn_data,trn_cat = trn_data[:500],trn_cat[:500]
 
