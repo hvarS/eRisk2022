@@ -41,6 +41,7 @@ class ModelSelection(object):
                     clf,_=tfidf_training_model(x_train,y_train,self.num_features,self.opt,self.num_jobs)
                 else:
                     clf,x_valid=no_pipeline_tfidf(x_train,y_train,x_valid,metamap_features_trn,metamap_features_valid,self.num_features,self.opt,self.num_jobs)
+                    print(x_valid.shape)
                     predicted = clf.predict(x_valid)
                     predicted_probability = clf.predict_proba(x_valid)
             else:
