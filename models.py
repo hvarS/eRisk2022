@@ -71,9 +71,11 @@ class ModelSelection(object):
                     vector = trn_model[itm]                      # Entropy Vectors 
                     for elm in vector:
                         vec[elm[0]]=elm[1]
-                    vec.extend(metamap_features_valid[i])
+                    if self.metamap:
+                        vec.extend(metamap_features_valid[i])
                     tst_vec.append(vec) 
-            tst_vec = scaler.transform(selector.transform(tst_vec))
+            if self.metamap:
+                tst_vec = scaler.transform(selector.transform(tst_vec))
             predicted = clf.predict(tst_vec)
             predicted_probability = clf.predict_proba(tst_vec)
         elif self.model=='doc2vec':

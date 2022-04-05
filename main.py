@@ -49,7 +49,7 @@ if not args.metamap:
 else:
         trn_data,trn_cat,trn_vect = dataset.get_data()
 print(len(trn_data),len(trn_cat))
-print(trn_data)
+
 ############### Debugging on small dataset ###### 
 # trn_data,trn_cat = trn_data[:500],trn_cat[:500]
 
