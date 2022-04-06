@@ -81,10 +81,11 @@ def no_pipeline_entropy(trn_data,trn_cat,valid_data,trn_features,valid_features,
     selector = SelectKBest(chi2, k=no_of_selected_features)
     scaler = StandardScaler()
 
-    trn_vec = selector.fit_transform(trn_vec, trn_cat).toarray()
+    trn_vec = selector.fit_transform(trn_vec, trn_cat)
     trn_vec = scaler.fit_transform(trn_vec)
     clf.fit(trn_vec,trn_cat)
 
+    return clf,selector,scaler,trn_dct,trn_model
     
 
 
