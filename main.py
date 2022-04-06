@@ -11,6 +11,8 @@ from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import json
+from utils import get_test_data
 
 os.environ['CUDA_VISIBLE_DEVICES'] = "2"
 
@@ -35,6 +37,8 @@ parser.add_argument('--subreddit', action='store_true',default=False)
 parser.add_argument('--metamap', action='store_true',default=False)
 parser.add_argument('--force_train', action='store_true',default=False)
 parser.add_argument('--metamap_only',action ='store_true',default = False)
+parser.add_argument('--predict',action ='store_true',default = False)
+
 args = parser.parse_args()
 ############### Preparing Data ##################
 args.fpath = 'task{}_data/'.format(args.task)
@@ -49,6 +53,10 @@ if not args.metamap:
 else:
         trn_data,trn_cat,trn_vect = dataset.get_data()
 print(len(trn_data),len(trn_cat))
+
+############ Store original data if predicting ###########
+if args.predict:
+        orgn_trn_data,orgn_trn_cat = trn_data.copy(),trn_cat.copy()
 
 ############### Debugging on small dataset ###### 
 # trn_data,trn_cat = trn_data[:500],trn_cat[:500]
@@ -135,14 +143,27 @@ confidence_score=round(confidence_score, 3)
 print ('\n The Probablity of Confidence of the Classifier: \t'+str(confidence_score)+'\n')    
 
 
-#Saving and analyzing classified values:
-# for i,actual_label in enumerate(actual_class_labels):
-#         if actual_label == 1:
-#                 if predicted_class_labels[i]==1:
-#                         with open(f'predictions/true_positive/text{i}','w') as f:
-#                                 f.write(tst_data[i])
-#                 else:
-#                         with open(f'predictions/false_negative/text{i}','w') as f:
-#                                 f.write(tst_data[i])
-#         else:
-#                 pass
+if args.predict:
+        output_file = '{}_{}_{}.json'.format(args.model,args.clf,args.features)
+        tst_data,tst_dict = get_test_data(confidence_score,os.path.join(os.getcwd(),args.fpath))
+        print('\n ***** Classifying Test Data ***** \n')   
+        predicted_class_labels=[];
+        predicted_class_labels,predicted_probability= model.fit(orgn_trn_data, orgn_trn_cat,tst_data) 
+        tst_results=[]; 
+        keys=list(tst_dict)
+        for i in range(0,len(tst_data)):
+                tmp={}; 
+                tmp['nick']=keys[i]
+                tmp['decision']=0
+                if predicted_probability[i][0]>=predicted_probability[i][1]:
+                        tmp['score']=predicted_probability[i][0]
+                else:
+                        tmp['score']=predicted_probability[i][1]
+                #            tmp['decision']=int(predicted_class_labels[i])
+                if tmp['score']>=0.75:
+                        tmp['decision']=int(predicted_class_labels[i])
+                tst_results.append(tmp)
+        with open('submissions/'+output_file, 'w', encoding='utf-8') as fl:
+                json.dump(tst_results, fl, ensure_ascii=False, indent=4)
+
+        print('\n !!!!! Submission file with the test data class labels is ready !!!!! \n')   
