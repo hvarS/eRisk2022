@@ -53,7 +53,8 @@ if not args.metamap:
 else:
         trn_data,trn_cat,trn_vect = dataset.get_data()
 print(len(trn_data),len(trn_cat))
-
+import sys
+sys.exit(0)
 ############ Store original data if predicting ###########
 if args.predict:
         orgn_trn_data,orgn_trn_cat = trn_data.copy(),trn_cat.copy()
@@ -91,60 +92,61 @@ predicted_class_labels=[]; actual_class_labels=[]; count=0; probs=[];
 #         predicted_class_labels.append(item)
 
 ## Result Verification
-if args.metamap:
-        trn_data, tst_data, trn_cat, tst_cat,trn_metamap,tst_metamap = train_test_split(trn_data, trn_cat,trn_vect, test_size=0.30, random_state=42,stratify=trn_cat)   
-        predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data,trn_metamap,tst_metamap) 
-else:
-        trn_data, tst_data, trn_cat, tst_cat = train_test_split(trn_data, trn_cat,test_size=0.30, random_state=42,stratify=trn_cat) 
-        predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data) 
+if not args.predict:
+        if args.metamap:
+                trn_data, tst_data, trn_cat, tst_cat,trn_metamap,tst_metamap = train_test_split(trn_data, trn_cat,trn_vect, test_size=0.30, random_state=42,stratify=trn_cat)   
+                predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data,trn_metamap,tst_metamap) 
+        else:
+                trn_data, tst_data, trn_cat, tst_cat = train_test_split(trn_data, trn_cat,test_size=0.30, random_state=42,stratify=trn_cat) 
+                predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data) 
 
-# for item in predicted_probability:
-#         if torch.is_tensor(item):
-#                 probs.append(float(torch.max(item)))
-#         else:
-#                 probs.append(float(max(item)))
-for item in predicted_probability:
-        probs.append(float(max(item)))
-for item in tst_cat:
-        actual_class_labels.append(item)
-for item in predicted:
-        predicted_class_labels.append(int(item))
+        # for item in predicted_probability:
+        #         if torch.is_tensor(item):
+        #                 probs.append(float(torch.max(item)))
+        #         else:
+        #                 probs.append(float(max(item)))
+        for item in predicted_probability:
+                probs.append(float(max(item)))
+        for item in tst_cat:
+                actual_class_labels.append(item)
+        for item in predicted:
+                predicted_class_labels.append(int(item))
 
-#   Evaluation 
-class_names = list(Counter(actual_class_labels).keys())
-class_names = [str(x) for x in class_names]
+        #   Evaluation 
+        class_names = list(Counter(actual_class_labels).keys())
+        class_names = [str(x) for x in class_names]
 
 
-print(classification_report(actual_class_labels,predicted_class_labels,target_names=class_names))
+        print(classification_report(actual_class_labels,predicted_class_labels,target_names=class_names))
 
-cf_matrix = confusion_matrix(actual_class_labels, predicted_class_labels)
+        cf_matrix = confusion_matrix(actual_class_labels, predicted_class_labels)
 
-#Visualization of Confusion Matrix 
-ax = sns.heatmap(cf_matrix, annot=True, cmap='Blues')
+        #Visualization of Confusion Matrix 
+        ax = sns.heatmap(cf_matrix, annot=True, cmap='Blues')
 
-ax.set_title('Seaborn Confusion Matrix with labels\n\n');
-ax.set_xlabel('\nPredicted Values')
-ax.set_ylabel('Actual Values ');
+        ax.set_title('Seaborn Confusion Matrix with labels\n\n');
+        ax.set_xlabel('\nPredicted Values')
+        ax.set_ylabel('Actual Values ');
 
-## Ticket labels - List must be in alphabetical order
-ax.xaxis.set_ticklabels(['False','True'])
-ax.yaxis.set_ticklabels(['False','True'])
+        ## Ticket labels - List must be in alphabetical order
+        ax.xaxis.set_ticklabels(['False','True'])
+        ax.yaxis.set_ticklabels(['False','True'])
 
-## Display the visualization of the Confusion Matrix.
-fig = ax.get_figure()
-fig.savefig('confusion_matrix_sample.png')
+        ## Display the visualization of the Confusion Matrix.
+        fig = ax.get_figure()
+        fig.savefig('confusion_matrix_sample.png')
 
-tn, fp, fn, tp = confusion_matrix(actual_class_labels, predicted_class_labels).ravel()
-specificity = tn / (tn+fp)
-print('\n Specifity Score :',str(specificity))
+        tn, fp, fn, tp = confusion_matrix(actual_class_labels, predicted_class_labels).ravel()
+        specificity = tn / (tn+fp)
+        print('\n Specifity Score :',str(specificity))
 
-confidence_score=statistics.mean(probs)-statistics.variance(probs)
-confidence_score=round(confidence_score, 3)
-print ('\n The Probablity of Confidence of the Classifier: \t'+str(confidence_score)+'\n')    
-
+        confidence_score=statistics.mean(probs)-statistics.variance(probs)
+        confidence_score=round(confidence_score, 3)
+        print ('\n The Probablity of Confidence of the Classifier: \t'+str(confidence_score)+'\n')    
 
 if args.predict:
         output_file = '{}_{}_{}.json'.format(args.model,args.clf,args.features)
+        confidence_score = 1.0
         tst_data,tst_dict = get_test_data(confidence_score,os.path.join(os.getcwd(),args.fpath))
         print('\n ***** Classifying Test Data ***** \n')   
         predicted_class_labels=[];
