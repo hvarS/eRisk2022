@@ -123,8 +123,9 @@ class ExtractMetaMap(object):
                     reader = json.load(fl)
                     fl.close()        
                     for item in reader:
+                        # print(item)
                         idn=item['nick']
-                        if item['number']==0 and idn not in unique_id:
+                        if item['number']==1 and idn not in unique_id:
                             unique_id.append(idn)
                             tst_dict[idn]=[]
                             tst_dict[idn].append(item['content'])
@@ -132,6 +133,7 @@ class ExtractMetaMap(object):
                             tst_dict[idn].append(item['content'])
                     for item in tqdm(tst_dict):
                         text=''.join(tst_dict[item])
+                        print(text)
                         vector_dict[item] = get_metamap_vector(text)
             with open('metamap_vectors_test.pkl','wb') as f:
                 pickle.dump(vector_dict,f)
