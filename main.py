@@ -6,6 +6,7 @@ from sklearn.metrics import classification_report,confusion_matrix
 from collections import Counter
 # import torch
 import torch
+import pickle
 import statistics
 import argparse
 from sklearn.model_selection import train_test_split
@@ -57,7 +58,8 @@ print(len(trn_data),len(trn_cat))
 
 ############ Store original data if predicting ###########
 if args.predict:
-        orgn_trn_data,orgn_trn_cat = trn_data.copy(),trn_cat.copy()
+        orgn_trn_data,orgn_trn_cat,orgn_trn_vect = trn_data.copy(),trn_cat.copy(),trn_vect.copy()
+
 
 ############### Debugging on small dataset ###### 
 # trn_data,trn_cat = trn_data[:500],trn_cat[:500]
@@ -145,12 +147,18 @@ if not args.predict:
         print ('\n The Probablity of Confidence of the Classifier: \t'+str(confidence_score)+'\n')    
 
 if args.predict:
+        if args.metamap:
+                tst_vector_file = open('metamap_vectors_test.pkl','rb')
+                tst_vector = pickle.load(tst_vector_file)
         output_file = '{}_{}_{}_{}.json'.format(args.model,args.clf,args.features,args.subreddit)
         confidence_score = 1.0
         tst_data,tst_dict = get_test_data(confidence_score,os.path.join(os.getcwd(),args.fpath))
         print('\n ***** Classifying Test Data ***** \n')   
         predicted_class_labels=[];
-        predicted_class_labels,predicted_probability= model.fit(orgn_trn_data, orgn_trn_cat,tst_data) 
+        if not args.metamap:
+                predicted_class_labels,predicted_probability= model.fit(orgn_trn_data, orgn_trn_cat,tst_data) 
+        else:
+                predicted_class_labels,predicted_probability= model.fit(orgn_trn_data, orgn_trn_cat,tst_data,orgn_trn_vect,tst_vector) 
         # print(predicted_probability)
         for item in predicted_probability:
                 if torch.is_tensor(item):
