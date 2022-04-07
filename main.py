@@ -5,6 +5,7 @@ from models import ModelSelection
 from sklearn.metrics import classification_report,confusion_matrix
 from collections import Counter
 # import torch
+import torch
 import statistics
 import argparse
 from sklearn.model_selection import train_test_split
@@ -20,7 +21,7 @@ parser = argparse.ArgumentParser(description='eRisk2022')
 parser.add_argument('--task', metavar='T', type=int, default=1,
                     help=' select which task to train/eval')
 parser.add_argument('--model', metavar='M', type=str, default='entropy',
-                    help=' select base model from tfidf,doc2vec,entropy')
+                    help=' select base model from tfidf,doc2vec,entropy,transformer')
 parser.add_argument('--clf', metavar='O', type=str, default='svm',
                     help='select classifier')
 parser.add_argument('--features', metavar='N', type=int, default=200,
@@ -31,7 +32,7 @@ parser.add_argument('--jobs', metavar='J', type=int, default=1,
                     help='specify num of jobs while training')
 parser.add_argument('--fpath', metavar='F', type=str, default='task1_data',
                     help='data folder name ')
-parser.add_argument('--model_name', metavar='T', type=str, default='bert-base-uncased',
+parser.add_argument('--model_name', metavar='T', type=str, default='allenai/longformer-base-4096',
                     help='name of the huggingface transformer')
 parser.add_argument('--subreddit', action='store_true',default=False)
 parser.add_argument('--metamap', action='store_true',default=False)
@@ -53,8 +54,7 @@ if not args.metamap:
 else:
         trn_data,trn_cat,trn_vect = dataset.get_data()
 print(len(trn_data),len(trn_cat))
-import sys
-sys.exit(0)
+
 ############ Store original data if predicting ###########
 if args.predict:
         orgn_trn_data,orgn_trn_cat = trn_data.copy(),trn_cat.copy()
@@ -145,23 +145,35 @@ if not args.predict:
         print ('\n The Probablity of Confidence of the Classifier: \t'+str(confidence_score)+'\n')    
 
 if args.predict:
-        output_file = '{}_{}_{}.json'.format(args.model,args.clf,args.features)
+        output_file = '{}_{}_{}_{}.json'.format(args.model,args.clf,args.features,args.subreddit)
         confidence_score = 1.0
         tst_data,tst_dict = get_test_data(confidence_score,os.path.join(os.getcwd(),args.fpath))
         print('\n ***** Classifying Test Data ***** \n')   
         predicted_class_labels=[];
         predicted_class_labels,predicted_probability= model.fit(orgn_trn_data, orgn_trn_cat,tst_data) 
+        # print(predicted_probability)
+        for item in predicted_probability:
+                if torch.is_tensor(item):
+                        probs.append(float(torch.max(item)))
+                else:
+                        probs.append(float(max(item)))
         tst_results=[]; 
         keys=list(tst_dict)
         for i in range(0,len(tst_data)):
                 tmp={}; 
                 tmp['nick']=keys[i]
                 tmp['decision']=0
-                if predicted_probability[i][0]>=predicted_probability[i][1]:
-                        tmp['score']=predicted_probability[i][0]
+                if args.model != 'transformer':
+                        if predicted_probability[i][0]>=predicted_probability[i][1]:
+                                tmp['score']=predicted_probability[i][0]
+                        else:
+                                tmp['score']=predicted_probability[i][1]
+                        #            tmp['decision']=int(predicted_class_labels[i])
                 else:
-                        tmp['score']=predicted_probability[i][1]
-                #            tmp['decision']=int(predicted_class_labels[i])
+                        if predicted_probability[i][0][0]>=predicted_probability[i][0][1]:
+                                tmp['score']=predicted_probability[i][0][0].item()
+                        else:
+                                tmp['score']=predicted_probability[i][0][1].item()
                 if tmp['score']>=0.75:
                         tmp['decision']=int(predicted_class_labels[i])
                 tst_results.append(tmp)

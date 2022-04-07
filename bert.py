@@ -63,10 +63,12 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
         
         #Decouple Model name
         
-        checkpoint_path = "TransformerResults/{}/checkpoint-1500".format('_'.join(model_name.split('/')))
+        checkpoint_path = "saved_models/transformer_checkpoints/allenai_longformer-base-4096_model/saved_models/transformer_checkpoints/allenai_longformer-base-4096_model"
         
-
-        tokenizer = AutoTokenizer.from_pretrained(model_name, do_lower_case=True) 
+        if os.path.exists(checkpoint_path):
+            tokenizer = AutoTokenizer.from_pretrained(checkpoint_path, do_lower_case=True) 
+        else:
+            tokenizer = AutoTokenizer.from_pretrained(model_name, do_lower_case=True) 
         labels=np.asarray(trn_cat)     # Class labels in nparray format     
         (train_texts, valid_texts, train_labels, valid_labels)= train_test_split(trn_data, labels, test_size=test_size)
         train_encodings = tokenizer(train_texts, truncation=True, padding=True, max_length=max_length)
@@ -81,7 +83,7 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
             model = AutoModelForSequenceClassification.from_pretrained(model_name, num_labels=2)
         training_args = TrainingArguments(
             output_dir='saved_models/transformer_checkpoints/{}_model'.format('_'.join(model_name.split('/'))),          # output directory
-            num_train_epochs=5,              # total number of training epochs
+            num_train_epochs=10,              # total number of training epochs
             per_device_train_batch_size=4,  # batch size per device during training
             per_device_eval_batch_size=4,   # batch size for evaluation
             warmup_steps=500,                # number of warmup steps for learning rate scheduler

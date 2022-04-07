@@ -1,5 +1,5 @@
 from baselines import metamap_only, no_pipeline_entropy, no_pipeline_tfidf, tfidf_training_model,doc2vec_training_model,entropy_training_model
-# from bert import bert_training_model, bert_validate
+from bert import bert_training_model, bert_validate
 import os
 import joblib
 import nltk
@@ -90,10 +90,10 @@ class ModelSelection(object):
                 tst_vec.append(inf_vec)
             predicted = clf.predict(tst_vec)     
             predicted_probability = clf.predict_proba(tst_vec)
-        # elif self.model=='transformer':
-        #     trn_model,trn_tokenizer,class_names= bert_training_model(x_train,y_train,max_length = 512,model_name = self.model_name) 
-        #     predicted=[]; predicted_probability=[]
-        #     bert_validate(x_valid,trn_model,trn_tokenizer,class_names,predicted,predicted_probability,max_length=512)
+        elif self.model=='transformer':
+            trn_model,trn_tokenizer,class_names= bert_training_model(x_train,y_train,max_length = 2048,model_name = self.model_name) 
+            predicted=[]; predicted_probability=[]
+            bert_validate(x_valid,trn_model,trn_tokenizer,class_names,predicted,predicted_probability,max_length=2048)
         else:
             print('Please Select a correct model configuration')
             sys.exit(0)
