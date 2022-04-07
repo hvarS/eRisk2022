@@ -19,5 +19,4 @@ RedditExtract/*.csv
 predictions
 pymm
 training.pkl
-submissions
 saved_datasets

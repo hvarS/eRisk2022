@@ -55,14 +55,14 @@ if not args.metamap:
 else:
         trn_data,trn_cat,trn_vect = dataset.get_data()
 print(len(trn_data),len(trn_cat))
+############### Debugging on small dataset ###### 
+# trn_data,trn_cat,trn_vect = trn_data[:50],trn_cat[:50],trn_vect[:50]
 
 ############ Store original data if predicting ###########
 if args.predict:
         orgn_trn_data,orgn_trn_cat,orgn_trn_vect = trn_data.copy(),trn_cat.copy(),trn_vect.copy()
 
 
-############### Debugging on small dataset ###### 
-# trn_data,trn_cat = trn_data[:500],trn_cat[:500]
 
 ############### Choosing Model and Model Parameters ##################
 option = args.model
@@ -147,18 +147,16 @@ if not args.predict:
         print ('\n The Probablity of Confidence of the Classifier: \t'+str(confidence_score)+'\n')    
 
 if args.predict:
-        if args.metamap:
-                tst_vector_file = open('metamap_vectors_test.pkl','rb')
-                tst_vector = pickle.load(tst_vector_file)
         output_file = '{}_{}_{}_{}.json'.format(args.model,args.clf,args.features,args.subreddit)
         confidence_score = 1.0
-        tst_data,tst_dict = get_test_data(confidence_score,os.path.join(os.getcwd(),args.fpath))
+        tst_data,tst_dict,tst_vectors = get_test_data(confidence_score,os.path.join(os.getcwd(),args.fpath),metamap=args.metamap)
+        print(len(tst_data),len(tst_vectors))
         print('\n ***** Classifying Test Data ***** \n')   
         predicted_class_labels=[];
         if not args.metamap:
                 predicted_class_labels,predicted_probability= model.fit(orgn_trn_data, orgn_trn_cat,tst_data) 
         else:
-                predicted_class_labels,predicted_probability= model.fit(orgn_trn_data, orgn_trn_cat,tst_data,orgn_trn_vect,tst_vector) 
+                predicted_class_labels,predicted_probability= model.fit(orgn_trn_data, orgn_trn_cat,tst_data,orgn_trn_vect,tst_vectors) 
         # print(predicted_probability)
         for item in predicted_probability:
                 if torch.is_tensor(item):
