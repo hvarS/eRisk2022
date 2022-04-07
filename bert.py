@@ -25,14 +25,7 @@ class get_torch_data_format(torch.utils.data.Dataset):
    def __len__(self):
        return len(self.labels)
 
-
-def compute_metrics(pred):
-    labels = pred.label_ids
-    preds = pred.predictions.argmax(-1)
-    acc = accuracy_score(labels, preds)
-    return {
-        'accuracy': acc,
-    }     
+ 
 
 
 class get_validation_data_format(torch.utils.data.Dataset):
@@ -101,11 +94,11 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
             compute_metrics=compute_metrics,     # the callback that computes metrics of interest
             )
         print('\n Trainer done \n')
-        # if os.path.exists(checkpoint_path):
-        #     print('Resuming from Checkpoint !')
-        #     trainer.train(resume_from_checkpoint = True)
-        # else:
-        #     trainer.train()
+        if os.path.exists(checkpoint_path):
+            print('Resuming from Checkpoint !')
+            trainer.train(resume_from_checkpoint = True)
+        else:
+            trainer.train()
         print('\n Trainer train done \n')        
         print('\n save model \n')
 

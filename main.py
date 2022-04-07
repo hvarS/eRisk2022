@@ -100,13 +100,13 @@ if not args.predict:
                 trn_data, tst_data, trn_cat, tst_cat = train_test_split(trn_data, trn_cat,test_size=0.30, random_state=42,stratify=trn_cat) 
                 predicted,predicted_probability= model.fit(trn_data, trn_cat,tst_data) 
 
-        # for item in predicted_probability:
-        #         if torch.is_tensor(item):
-        #                 probs.append(float(torch.max(item)))
-        #         else:
-        #                 probs.append(float(max(item)))
         for item in predicted_probability:
-                probs.append(float(max(item)))
+                if torch.is_tensor(item):
+                        probs.append(float(torch.max(item)))
+                else:
+                        probs.append(float(max(item)))
+        # for item in predicted_probability:
+        #         probs.append(float(max(item)))
         for item in tst_cat:
                 actual_class_labels.append(item)
         for item in predicted:
