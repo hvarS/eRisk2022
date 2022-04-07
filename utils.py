@@ -23,7 +23,7 @@ def get_test_data(confidence_score,tst_path,metamap = False):
                     fl.close()        
                     for item in reader:
                         idn=item['nick']
-                        if item['number']==2 and idn not in unique_id:
+                        if item['number']==3 and idn not in unique_id:
                             unique_id.append(idn)
                             tst_dict[idn]=[]
                             tst_dict[idn].append(item['content'])

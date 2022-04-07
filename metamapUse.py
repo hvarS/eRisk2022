@@ -125,7 +125,7 @@ class ExtractMetaMap(object):
                     for item in reader:
                         # print(item)
                         idn=item['nick']
-                        if item['number']==2 and idn not in unique_id:
+                        if item['number']==3 and idn not in unique_id:
                             unique_id.append(idn)
                             tst_dict[idn]=[]
                             tst_dict[idn].append(item['content'])
