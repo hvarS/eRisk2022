@@ -3,12 +3,12 @@ import json
 import pickle
 
 def get_test_data(confidence_score,tst_path,metamap = False):
-
+    print(tst_path)
     if confidence_score>0.85:
         print('\n ***** Getting Test Data ***** \n')   
         tst_dict={}; tst_data=[]; tst_vectors = [] 
         unique_id=[]; 
-        tst_files=os.listdir(tst_path)    
+        tst_files=os.listdir(tst_path)
         vec = {}
         if metamap:
             f = open('metamap_vectors_test.pkl','rb')
@@ -23,7 +23,7 @@ def get_test_data(confidence_score,tst_path,metamap = False):
                     fl.close()        
                     for item in reader:
                         idn=item['nick']
-                        if item['number']==0 and idn not in unique_id:
+                        if item['number']==2 and idn not in unique_id:
                             unique_id.append(idn)
                             tst_dict[idn]=[]
                             tst_dict[idn].append(item['content'])

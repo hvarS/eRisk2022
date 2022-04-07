@@ -85,6 +85,17 @@ def no_pipeline_entropy(trn_data,trn_cat,valid_data,trn_features,valid_features,
     trn_vec = scaler.fit_transform(trn_vec)
     clf.fit(trn_vec,trn_cat)
 
+    model_path = os.path.join('saved_models','entropy_'+clf_opt+'_metamap')
+    if not os.path.exists(model_path):
+        os.mkdir(model_path)
+    os.chdir(model_path)
+    flname='entropy'+'_'+clf_opt+'_metamap_'+str(no_of_selected_features)
+    joblib.dump(clf, flname+'_clf.joblib')
+    joblib.dump(trn_model, flname+'_model.joblib')
+    joblib.dump(trn_dct, flname+'_dict.joblib')
+     
+    os.chdir(path)
+
     return clf,selector,scaler,trn_dct,trn_model
     
 
@@ -149,7 +160,7 @@ def tfidf_training_model(trn_data,trn_cat,no_of_selected_features = None,clf_opt
 
 
 # LogEntropy model    
-def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_opt = 'ab',num_jobs = 1): 
+def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_opt = 'ab',num_jobs = 1,subreddit = False): 
     print('\n ***** Building Entropy Based Training Model ***** \n')
     print('No of Selected Terms \t'+str(no_of_selected_features)) 
     trn_vec=[]; trn_docs=[]; 
@@ -188,11 +199,11 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
     clf= grid.best_estimator_
     print(f'Time Taken to Fit GridSearch : {end-start}')
 
-    model_path = os.path.join('saved_models','entropy_'+clf_opt)
+    model_path = os.path.join('saved_models','entropy_'+clf_opt+'_'+subreddit)
     if not os.path.exists(model_path):
         os.mkdir(model_path)
     os.chdir(model_path)
-    flname='entropy'+'_'+clf_opt+'_'+str(no_of_selected_features)
+    flname='entropy'+'_'+clf_opt+'_'+subreddit+str(no_of_selected_features)
     joblib.dump(clf, flname+'_clf.joblib')
     joblib.dump(trn_model, flname+'_model.joblib')
     joblib.dump(trn_dct, flname+'_dict.joblib')

@@ -59,6 +59,7 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
         checkpoint_path = "saved_models/transformer_checkpoints/allenai_longformer-base-4096_model/saved_models/transformer_checkpoints/allenai_longformer-base-4096_model"
         
         if os.path.exists(checkpoint_path):
+            print('Tokenizer Found')
             tokenizer = AutoTokenizer.from_pretrained(checkpoint_path, do_lower_case=True) 
         else:
             tokenizer = AutoTokenizer.from_pretrained(model_name, do_lower_case=True) 

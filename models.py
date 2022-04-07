@@ -8,17 +8,27 @@ from tqdm import tqdm
 
 
 class ModelSelection(object):
-    def __init__(self,model = 'entropy',clf_opt = 'ab',num_features = None,num_jobs = 1,model_name = 'bert-base-uncased',metamap = False,force_train = False,metamap_only = False) -> None:
+    def __init__(self,model = 'entropy',clf_opt = 'ab',num_features = None,num_jobs = 1,model_name = 'bert-base-uncased',metamap = False,force_train = False,metamap_only = False,subreddit = False) -> None:
         self.model = model
         self.opt = clf_opt
         self.num_features  = num_features
         self.save = False
-        self.num_jobs = num_jobs    
+        self.num_jobs = num_jobs
+        self.subreddit = subreddit    
         self.model_name = model_name
         self.metamap = metamap
         self.force_train = force_train
         self.metamap_only = metamap_only
-        self.check_path = os.path.join(os.getcwd(),'saved_models',model+'_'+clf_opt,model+'_'+clf_opt+'_'+str(num_features)+'_clf.joblib')
+        if not self.metamap:
+            self.check_path = os.path.join(os.getcwd(),'saved_models',model+'_'+clf_opt,model+'_'+clf_opt+'_'+str(num_features)+'_clf.joblib')
+        else:
+            self.check_path = os.path.join(os.getcwd(),'saved_models',model+'_'+clf_opt+'_metamap',model+'_'+clf_opt+'_metemap_'+str(num_features)+'_clf.joblib')
+        # orgn_path = os.getcwd()
+        # os.chdir('saved_models/entropy_ab_metamap')
+        # print(os.listdir(os.getcwd()))
+        # self.check_path = os.path.join(os.getcwd(),os.listdir(os.getcwd())[0])
+        # print(os.path.exists(self.check_path))
+        # os.chdir(orgn_path)
         if (not os.path.exists(self.check_path) or self.force_train):
             self.save = True
         if not self.save:
@@ -51,7 +61,7 @@ class ModelSelection(object):
         elif self.model == 'entropy':
             if self.save:
                 if not self.metamap:
-                    clf,_,trn_dct,trn_model=entropy_training_model(x_train,y_train,self.num_features,self.opt,self.num_jobs)
+                    clf,_,trn_dct,trn_model=entropy_training_model(x_train,y_train,self.num_features,self.opt,self.num_jobs,self.subreddit)
                 else:
                     clf,selector,scaler,trn_dct,trn_model = no_pipeline_entropy(x_train,y_train,x_valid,metamap_features_trn,metamap_features_valid,self.num_features,self.opt,self.num_jobs)
             else:

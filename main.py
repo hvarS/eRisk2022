@@ -68,7 +68,7 @@ if args.predict:
 option = args.model
 clf_opt = args.clf
 num_features = args.features
-model = ModelSelection(option,clf_opt,num_features,args.jobs,model_name=args.model_name,metamap = args.metamap,force_train=args.force_train,metamap_only=args.metamap_only)
+model = ModelSelection(option,clf_opt,num_features,args.jobs,model_name=args.model_name,metamap = args.metamap,force_train=args.force_train,metamap_only=args.metamap_only,subreddit=args.subreddit)
 
 ############### KFold Cross Validation ##########
 skf = StratifiedKFold(n_splits=10)
