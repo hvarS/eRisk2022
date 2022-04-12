@@ -38,22 +38,4 @@ The following options of 'clf_opt' are available and the `default` is `s`:
 
         's' for Support Vector Machine 
 
-`model_source` is the path of BERT model from [Hugging Face](https://huggingface.co/models?search=bert-base-uncased) or from the local drive. `vec_len` is the desired length of the feature vectors developed by the Doc2Vec model. The deafult option of `no_of_selected_terms` is `None`, otherwise desired number of terms should be mentioned. An example code to implement the whole model is uploaded as `testing_data_extraction.py`. 
 
-## Contact
-
-For any further query, comment or suggestion, you may reach out to me at welcometanmay@gmail.com
-
-## Citation
-```
-@article{basu21,
-  title={Exploring the Performance of Baseline Text Mining Frameworks for Early Prediction of Self Harm Over Social Media},
-  author={Basu, Tanmay and Gkoutos, Georgios V.},
-  journal={CLEF eRisk},
-  volume={},
-  number={},
-  pages={},
-  year={2021},
-  publisher={CLEF}
-}
-```
