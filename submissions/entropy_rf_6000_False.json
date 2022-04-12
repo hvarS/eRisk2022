@@ -62,7 +62,7 @@
     {
         "nick": "subject1030",
         "decision": 0,
-        "score": 1.0
+        "score": 0.7666666666666667
     },
     {
         "nick": "subject1041",
@@ -457,7 +457,7 @@
     {
         "nick": "subject1334",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject1336",
@@ -756,8 +756,8 @@
     },
     {
         "nick": "subject1628",
-        "decision": 1,
-        "score": 0.8333333333333334
+        "decision": 0,
+        "score": 1.0
     },
     {
         "nick": "subject1629",
@@ -1032,7 +1032,7 @@
     {
         "nick": "subject1883",
         "decision": 0,
-        "score": 0.9
+        "score": 1.0
     },
     {
         "nick": "subject1885",
@@ -1091,8 +1091,8 @@
     },
     {
         "nick": "subject1939",
-        "decision": 0,
-        "score": 0.9333333333333333
+        "decision": 1,
+        "score": 1.0
     },
     {
         "nick": "subject1944",
@@ -1342,7 +1342,7 @@
     {
         "nick": "subject2159",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject2161",
@@ -1506,7 +1506,7 @@
     },
     {
         "nick": "subject2326",
-        "decision": 0,
+        "decision": 1,
         "score": 1.0
     },
     {
@@ -1546,7 +1546,7 @@
     },
     {
         "nick": "subject2365",
-        "decision": 0,
+        "decision": 1,
         "score": 1.0
     },
     {
@@ -1756,7 +1756,7 @@
     },
     {
         "nick": "subject2538",
-        "decision": 0,
+        "decision": 1,
         "score": 1.0
     },
     {
@@ -1807,7 +1807,7 @@
     {
         "nick": "subject2578",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9333333333333333
     },
     {
         "nick": "subject2580",
@@ -1822,7 +1822,7 @@
     {
         "nick": "subject2587",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject2588",
@@ -2112,7 +2112,7 @@
     {
         "nick": "subject2850",
         "decision": 1,
-        "score": 0.9
+        "score": 1.0
     },
     {
         "nick": "subject2852",
@@ -2147,7 +2147,7 @@
     {
         "nick": "subject2885",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject2894",
@@ -2296,8 +2296,8 @@
     },
     {
         "nick": "subject2991",
-        "decision": 0,
-        "score": 1.0
+        "decision": 1,
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject2995",
@@ -2337,7 +2337,7 @@
     {
         "nick": "subject3028",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject3037",
@@ -2477,7 +2477,7 @@
     {
         "nick": "subject3183",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject3188",
@@ -2576,8 +2576,8 @@
     },
     {
         "nick": "subject3262",
-        "decision": 1,
-        "score": 1.0
+        "decision": 0,
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject3266",
@@ -2766,7 +2766,7 @@
     },
     {
         "nick": "subject3489",
-        "decision": 0,
+        "decision": 1,
         "score": 1.0
     },
     {
@@ -2787,7 +2787,7 @@
     {
         "nick": "subject3498",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject3499",
@@ -2836,7 +2836,7 @@
     },
     {
         "nick": "subject3564",
-        "decision": 0,
+        "decision": 1,
         "score": 1.0
     },
     {
@@ -2927,7 +2927,7 @@
     {
         "nick": "subject3656",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject3664",
@@ -3072,7 +3072,7 @@
     {
         "nick": "subject3788",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject3792",
@@ -3312,7 +3312,7 @@
     {
         "nick": "subject3989",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject3991",
@@ -3476,7 +3476,7 @@
     },
     {
         "nick": "subject4073",
-        "decision": 1,
+        "decision": 0,
         "score": 1.0
     },
     {
@@ -3486,7 +3486,7 @@
     },
     {
         "nick": "subject4081",
-        "decision": 1,
+        "decision": 0,
         "score": 1.0
     },
     {
@@ -3622,7 +3622,7 @@
     {
         "nick": "subject423",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject4237",
@@ -3647,7 +3647,7 @@
     {
         "nick": "subject4251",
         "decision": 0,
-        "score": 1.0
+        "score": 0.8666666666666667
     },
     {
         "nick": "subject4255",
@@ -3682,7 +3682,7 @@
     {
         "nick": "subject4288",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject429",
@@ -3691,8 +3691,8 @@
     },
     {
         "nick": "subject4298",
-        "decision": 1,
-        "score": 0.8333333333333334
+        "decision": 0,
+        "score": 1.0
     },
     {
         "nick": "subject4299",
@@ -3797,7 +3797,7 @@
     {
         "nick": "subject4355",
         "decision": 0,
-        "score": 0.6666666666666666
+        "score": 1.0
     },
     {
         "nick": "subject4359",
@@ -3842,7 +3842,7 @@
     {
         "nick": "subject4390",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject4391",
@@ -3902,7 +3902,7 @@
     {
         "nick": "subject4451",
         "decision": 0,
-        "score": 0.9
+        "score": 1.0
     },
     {
         "nick": "subject4456",
@@ -3931,7 +3931,7 @@
     },
     {
         "nick": "subject4487",
-        "decision": 0,
+        "decision": 1,
         "score": 1.0
     },
     {
@@ -3942,7 +3942,7 @@
     {
         "nick": "subject4494",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject4496",
@@ -3956,8 +3956,8 @@
     },
     {
         "nick": "subject4501",
-        "decision": 0,
-        "score": 1.0
+        "decision": 1,
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject4503",
@@ -4071,7 +4071,7 @@
     },
     {
         "nick": "subject457",
-        "decision": 1,
+        "decision": 0,
         "score": 1.0
     },
     {
@@ -4102,7 +4102,7 @@
     {
         "nick": "subject460",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject4613",
@@ -4117,7 +4117,7 @@
     {
         "nick": "subject4619",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject4625",
@@ -4136,7 +4136,7 @@
     },
     {
         "nick": "subject4633",
-        "decision": 1,
+        "decision": 0,
         "score": 1.0
     },
     {
@@ -4156,7 +4156,7 @@
     },
     {
         "nick": "subject4653",
-        "decision": 1,
+        "decision": 0,
         "score": 1.0
     },
     {
@@ -4332,7 +4332,7 @@
     {
         "nick": "subject4825",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject483",
@@ -4437,7 +4437,7 @@
     {
         "nick": "subject49",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject4908",
@@ -4566,7 +4566,7 @@
     },
     {
         "nick": "subject5054",
-        "decision": 0,
+        "decision": 1,
         "score": 0.9666666666666667
     },
     {
@@ -4667,7 +4667,7 @@
     {
         "nick": "subject5107",
         "decision": 0,
-        "score": 1.0
+        "score": 0.7333333333333333
     },
     {
         "nick": "subject5108",
@@ -4722,7 +4722,7 @@
     {
         "nick": "subject5142",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject5143",
@@ -4937,7 +4937,7 @@
     {
         "nick": "subject5291",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject5293",
@@ -4957,7 +4957,7 @@
     {
         "nick": "subject5311",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject5312",
@@ -4982,7 +4982,7 @@
     {
         "nick": "subject5348",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject5356",
@@ -5066,13 +5066,13 @@
     },
     {
         "nick": "subject5416",
-        "decision": 1,
+        "decision": 0,
         "score": 1.0
     },
     {
         "nick": "subject5418",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject5419",
@@ -5132,7 +5132,7 @@
     {
         "nick": "subject5485",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject5487",
@@ -5271,8 +5271,8 @@
     },
     {
         "nick": "subject5609",
-        "decision": 0,
-        "score": 0.8333333333333334
+        "decision": 1,
+        "score": 1.0
     },
     {
         "nick": "subject5612",
@@ -5292,7 +5292,7 @@
     {
         "nick": "subject5662",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject5666",
@@ -5477,7 +5477,7 @@
     {
         "nick": "subject5788",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9333333333333333
     },
     {
         "nick": "subject5790",
@@ -5521,13 +5521,13 @@
     },
     {
         "nick": "subject5811",
-        "decision": 0,
+        "decision": 1,
         "score": 0.9
     },
     {
         "nick": "subject582",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject5827",
@@ -5602,7 +5602,7 @@
     {
         "nick": "subject5889",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject5893",
@@ -5627,7 +5627,7 @@
     {
         "nick": "subject5905",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject5911",
@@ -5962,7 +5962,7 @@
     {
         "nick": "subject6222",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject6223",
@@ -5977,7 +5977,7 @@
     {
         "nick": "subject6231",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject6236",
@@ -6122,7 +6122,7 @@
     {
         "nick": "subject6341",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9333333333333333
     },
     {
         "nick": "subject6343",
@@ -6152,12 +6152,12 @@
     {
         "nick": "subject6377",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject6378",
-        "decision": 1,
-        "score": 1.0
+        "decision": 0,
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject638",
@@ -6237,7 +6237,7 @@
     {
         "nick": "subject6458",
         "decision": 1,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject6459",
@@ -6307,7 +6307,7 @@
     {
         "nick": "subject6517",
         "decision": 0,
-        "score": 0.6666666666666666
+        "score": 1.0
     },
     {
         "nick": "subject6519",
@@ -6382,7 +6382,7 @@
     {
         "nick": "subject6571",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9333333333333333
     },
     {
         "nick": "subject6576",
@@ -7412,7 +7412,7 @@
     {
         "nick": "subject7480",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject7484",
@@ -7562,7 +7562,7 @@
     {
         "nick": "subject7578",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject758",
@@ -7682,7 +7682,7 @@
     {
         "nick": "subject7655",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject7657",
@@ -7737,7 +7737,7 @@
     {
         "nick": "subject7692",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject7694",
@@ -7812,7 +7812,7 @@
     {
         "nick": "subject7755",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject776",
@@ -7902,7 +7902,7 @@
     {
         "nick": "subject7853",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 0.9
     },
     {
         "nick": "subject7856",
@@ -7931,11 +7931,6 @@
     },
     {
         "nick": "subject7876",
-        "decision": 0,
-        "score": 1.0
-    },
-    {
-        "nick": "subject7878",
         "decision": 0,
         "score": 1.0
     },
@@ -8062,7 +8057,7 @@
     {
         "nick": "subject7990",
         "decision": 0,
-        "score": 0.8333333333333334
+        "score": 1.0
     },
     {
         "nick": "subject7997",
@@ -8122,7 +8117,7 @@
     {
         "nick": "subject8027",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 0.9333333333333333
     },
     {
         "nick": "subject8031",
@@ -8136,7 +8131,7 @@
     },
     {
         "nick": "subject8037",
-        "decision": 1,
+        "decision": 0,
         "score": 1.0
     },
     {
@@ -8211,8 +8206,8 @@
     },
     {
         "nick": "subject8100",
-        "decision": 1,
-        "score": 0.9666666666666667
+        "decision": 0,
+        "score": 1.0
     },
     {
         "nick": "subject8103",
@@ -8427,7 +8422,7 @@
     {
         "nick": "subject8310",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject8314",
@@ -8647,7 +8642,7 @@
     {
         "nick": "subject854",
         "decision": 0,
-        "score": 1.0
+        "score": 0.8333333333333334
     },
     {
         "nick": "subject8541",
@@ -8666,8 +8661,8 @@
     },
     {
         "nick": "subject8551",
-        "decision": 1,
-        "score": 0.9666666666666667
+        "decision": 0,
+        "score": 1.0
     },
     {
         "nick": "subject8553",
@@ -8882,7 +8877,7 @@
     {
         "nick": "subject8748",
         "decision": 0,
-        "score": 0.7666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject8749",
@@ -8917,7 +8912,7 @@
     {
         "nick": "subject8779",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject878",
@@ -8947,7 +8942,7 @@
     {
         "nick": "subject8790",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject8793",
@@ -8972,7 +8967,7 @@
     {
         "nick": "subject8822",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject8823",
@@ -8997,12 +8992,12 @@
     {
         "nick": "subject8836",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 0.8666666666666667
     },
     {
         "nick": "subject8840",
         "decision": 0,
-        "score": 0.9
+        "score": 1.0
     },
     {
         "nick": "subject8845",
@@ -9107,7 +9102,7 @@
     {
         "nick": "subject8906",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject8914",
@@ -9446,7 +9441,7 @@
     },
     {
         "nick": "subject9220",
-        "decision": 1,
+        "decision": 0,
         "score": 1.0
     },
     {
@@ -9637,7 +9632,7 @@
     {
         "nick": "subject937",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject9373",
@@ -9822,7 +9817,7 @@
     {
         "nick": "subject9513",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject9514",
@@ -9877,7 +9872,7 @@
     {
         "nick": "subject9562",
         "decision": 0,
-        "score": 1.0
+        "score": 0.9666666666666667
     },
     {
         "nick": "subject9565",
@@ -10087,7 +10082,7 @@
     {
         "nick": "subject9734",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject9742",
@@ -10182,7 +10177,7 @@
     {
         "nick": "subject9818",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject9820",
@@ -10302,7 +10297,7 @@
     {
         "nick": "subject9924",
         "decision": 0,
-        "score": 0.9666666666666667
+        "score": 1.0
     },
     {
         "nick": "subject9925",
@@ -10311,8 +10306,8 @@
     },
     {
         "nick": "subject9937",
-        "decision": 0,
-        "score": 0.9666666666666667
+        "decision": 1,
+        "score": 0.9
     },
     {
         "nick": "subject9944",
@@ -10322,7 +10317,7 @@
     {
         "nick": "subject9945",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject9949",
@@ -10347,7 +10342,7 @@
     {
         "nick": "subject9968",
         "decision": 0,
-        "score": 0.9333333333333333
+        "score": 1.0
     },
     {
         "nick": "subject997",
