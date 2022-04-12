@@ -56,7 +56,7 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
         
         #Decouple Model name
         
-        checkpoint_path = "saved_models/transformer_checkpoints/allenai_longformer-base-4096_model/saved_models/transformer_checkpoints/allenai_longformer-base-4096_model"
+        checkpoint_path = "bud"
         
         if os.path.exists(checkpoint_path):
             print('Tokenizer Found')
@@ -78,8 +78,8 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
         training_args = TrainingArguments(
             output_dir='saved_models/transformer_checkpoints/{}_model'.format('_'.join(model_name.split('/'))),          # output directory
             num_train_epochs=10,              # total number of training epochs
-            per_device_train_batch_size=4,  # batch size per device during training
-            per_device_eval_batch_size=4,   # batch size for evaluation
+            per_device_train_batch_size=8,  # batch size per device during training
+            per_device_eval_batch_size=8,   # batch size for evaluation
             warmup_steps=500,                # number of warmup steps for learning rate scheduler
             weight_decay=0.01,               # strength of weight decay
             logging_dir='./transformerLogs',            # directory for storing logs

@@ -126,10 +126,10 @@ class DepressionDataset(object):
         super(DepressionDataset,self).__init__()
         self.path = path
         self.fpath = fpath
-        self.trn_data,self.trn_cat=self.get_training_data()
+        self.trn_data,self.trn_cat,self.trn_vec=self.get_training_data()
     
     def get_data(self):
-        return self.trn_data,self.trn_cat
+        return self.trn_data,self.trn_cat,self.trn_vec
 
     def get_training_data(self):
         print('\n ***** Reading Training Data ***** \n')
@@ -152,8 +152,7 @@ class DepressionDataset(object):
                 golden_truths[idn].append(label)
         
         trn_data=[]; trn_cat=[];  trn_dict={}
-        trn_files= glob.glob(os.path.join(training_loc,'positive_examples/chunk*'))
-
+        trn_files=os.listdir(os.path.join(training_loc,'data'))
         for file in tqdm(trn_files):
             # row = {}
             if file.find('.xml')>0:
@@ -193,7 +192,7 @@ class DepressionDataset(object):
         #     writer = csv.DictWriter(csvfile, fieldnames=field_names)
         #     writer.writeheader()
         #     writer.writerows(saving_dictionary)
-        return trn_data, trn_cat
+        return trn_data, trn_cat , []
 
 class AnorexiaDataset(object):
     def __init__(self,path,fpath):
@@ -269,6 +268,8 @@ class AnorexiaDataset(object):
         #     writer = csv.DictWriter(csvfile, fieldnames=field_names)
         #     writer.writeheader()
         #     writer.writerows(saving_dictionary)
+        # trn_data = [x[0] for _,x in trn_dict.items()]
+        # trn_cat = [x[1] for _,x in trn_dict.items()]
         return trn_data, trn_cat,[]
     
 

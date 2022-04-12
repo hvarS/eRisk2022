@@ -199,11 +199,11 @@ def entropy_training_model(trn_data,trn_cat,no_of_selected_features = 1000,clf_o
     clf= grid.best_estimator_
     print(f'Time Taken to Fit GridSearch : {end-start}')
 
-    model_path = os.path.join('saved_models','entropy_'+clf_opt+'_'+subreddit)
+    model_path = os.path.join('saved_models','entropy_'+clf_opt+'_')
     if not os.path.exists(model_path):
         os.mkdir(model_path)
     os.chdir(model_path)
-    flname='entropy'+'_'+clf_opt+'_'+subreddit+str(no_of_selected_features)
+    flname='entropy'+'_'+clf_opt+'_'+str(no_of_selected_features)
     joblib.dump(clf, flname+'_clf.joblib')
     joblib.dump(trn_model, flname+'_model.joblib')
     joblib.dump(trn_dct, flname+'_dict.joblib')
