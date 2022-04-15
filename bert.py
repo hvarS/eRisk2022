@@ -56,7 +56,7 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
         
         #Decouple Model name
         
-        checkpoint_path = "bud"
+        checkpoint_path = "saved_models/transformer_checkpoints/allenai_longformer-base-4096_model/saved_models/transformer_checkpoints/allenai_longformer-base-4096_model"
         
         if os.path.exists(checkpoint_path):
             print('Tokenizer Found')
@@ -95,11 +95,11 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
             compute_metrics=compute_metrics,     # the callback that computes metrics of interest
             )
         print('\n Trainer done \n')
-        if os.path.exists(checkpoint_path):
-            print('Resuming from Checkpoint !')
-            trainer.train(resume_from_checkpoint = True)
-        else:
-            trainer.train()
+        # if os.path.exists(checkpoint_path):
+        #     print('Resuming from Checkpoint !')
+        #     trainer.train(resume_from_checkpoint = True)
+        # else:
+        #     trainer.train()
         print('\n Trainer train done \n')        
         print('\n save model \n')
 
@@ -128,3 +128,5 @@ def bert_validate(x_valid,trn_model,trn_tokenizer,class_names,predicted,predicte
             cl=class_names[probs.argmax()]
             predicted.append(cl)      
             predicted_probability.append(probs) 
+
+

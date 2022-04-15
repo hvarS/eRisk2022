@@ -19,16 +19,18 @@ class ModelSelection(object):
         self.metamap = metamap
         self.force_train = force_train
         self.metamap_only = metamap_only
+
         if not self.metamap:
             self.check_path = os.path.join(os.getcwd(),'saved_models',model+'_'+clf_opt,model+'_'+clf_opt+'_'+str(num_features)+'_clf.joblib')
         else:
-            self.check_path = os.path.join(os.getcwd(),'saved_models',model+'_'+clf_opt+'_metamap',model+'_'+clf_opt+'_metemap_'+str(num_features)+'_clf.joblib')
+            self.check_path = os.path.join(os.getcwd(),'saved_models',model+'_'+clf_opt,model+'_'+clf_opt+'_'+str(num_features)+'_clf.joblib')
         # orgn_path = os.getcwd()
         # os.chdir('saved_models/entropy_ab_metamap')
         # print(os.listdir(os.getcwd()))
         # self.check_path = os.path.join(os.getcwd(),os.listdir(os.getcwd())[0])
         # print(os.path.exists(self.check_path))
         # os.chdir(orgn_path)
+        print(os.path.exists(self.check_path))
         if (not os.path.exists(self.check_path) or self.force_train):
             self.save = True
         if not self.save:
@@ -68,7 +70,10 @@ class ModelSelection(object):
                 clf=joblib.load(self.check_path)
                 trn_dct=joblib.load(os.path.join(os.getcwd(),'saved_models',self.model+'_'+self.opt,self.model+'_'+self.opt+'_'+str(self.num_features)+'_dict.joblib'))
                 trn_model=joblib.load(os.path.join(os.getcwd(),'saved_models',self.model+'_'+self.opt,self.model+'_'+self.opt+'_'+str(self.num_features)+'_model.joblib'))
-            
+                if self.metamap:
+                    scaler = joblib.load(os.path.join(os.getcwd(),'saved_models',self.model+'_'+self.opt,self.model+'_'+self.opt+'_'+str(self.num_features)+'_scaler.joblib'))
+                    selector = joblib.load(os.path.join(os.getcwd(),'saved_models',self.model+'_'+self.opt,self.model+'_'+self.opt+'_'+str(self.num_features)+'_selector.joblib'))
+                    
             print(' Tokenizing Validation Dataset')
             for doc in tqdm(x_valid):
                 doc=nltk.word_tokenize(doc.lower())
@@ -101,9 +106,9 @@ class ModelSelection(object):
             predicted = clf.predict(tst_vec)     
             predicted_probability = clf.predict_proba(tst_vec)
         elif self.model=='transformer':
-            trn_model,trn_tokenizer,class_names= bert_training_model(x_train,y_train,max_length = 2048,model_name = self.model_name) 
+            trn_model,trn_tokenizer,class_names= bert_training_model(x_train,y_train,max_length = 512,model_name = self.model_name) 
             predicted=[]; predicted_probability=[]
-            bert_validate(x_valid,trn_model,trn_tokenizer,class_names,predicted,predicted_probability,max_length=2048)
+            bert_validate(x_valid,trn_model,trn_tokenizer,class_names,predicted,predicted_probability,max_length=512)
         else:
             print('Please Select a correct model configuration')
             sys.exit(0)

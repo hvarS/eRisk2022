@@ -85,14 +85,17 @@ def no_pipeline_entropy(trn_data,trn_cat,valid_data,trn_features,valid_features,
     trn_vec = scaler.fit_transform(trn_vec)
     clf.fit(trn_vec,trn_cat)
 
-    model_path = os.path.join('saved_models','entropy_'+clf_opt+'_metamap')
+    model_path = os.path.join('saved_models','entropy_'+clf_opt)
     if not os.path.exists(model_path):
         os.mkdir(model_path)
     os.chdir(model_path)
-    flname='entropy'+'_'+clf_opt+'_metamap_'+str(no_of_selected_features)
+    flname='entropy'+'_'+clf_opt+str(no_of_selected_features)
     joblib.dump(clf, flname+'_clf.joblib')
     joblib.dump(trn_model, flname+'_model.joblib')
     joblib.dump(trn_dct, flname+'_dict.joblib')
+    joblib.dump(clf, flname+'_clf.joblib')
+    joblib.dump(selector, flname+'_selector.joblib')
+    joblib.dump(scaler, flname+'_scaler.joblib')
      
     os.chdir(path)
 
