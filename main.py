@@ -14,9 +14,17 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
 import json
+import re 
+import sys
 from utils import get_test_data
+import glob
 
 os.environ['CUDA_VISIBLE_DEVICES'] = "2"
+
+def extract_number(f):
+        s = re.findall("\d+$",f)
+        return (int(s[0]) if s else -1,f)
+
 
 parser = argparse.ArgumentParser(description='eRisk2022')
 parser.add_argument('--task', metavar='T', type=int, default=1,
@@ -44,25 +52,31 @@ parser.add_argument('--predict',action ='store_true',default = False)
 args = parser.parse_args()
 ############### Preparing Data ##################
 args.fpath = 'task{}_data/'.format(args.task)
-if args.task==1:       
-        dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath,args)
-elif args.task==2:
-        dataset = DepressionDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
-elif args.task==3:
-        dataset = AnorexiaDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
-if not args.metamap:
-        trn_data,trn_cat,trn_vect= dataset.get_data()
-else:
-        trn_data,trn_cat,trn_vect = dataset.get_data()
-print(len(trn_data),len(trn_cat))
+if not args.predict:
+        if args.task==1:       
+                dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath,args)
+        elif args.task==2:
+                dataset = DepressionDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
+        elif args.task==3:
+                dataset = AnorexiaDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath)
+        if not args.metamap:
+                trn_data,trn_cat,trn_vect= dataset.get_data()
+        else:
+                trn_data,trn_cat,trn_vect = dataset.get_data()
+
+# print(len(trn_data),len(trn_cat))
 ############### Debugging on small dataset ###### 
 # trn_data,trn_cat,trn_vect = trn_data[:50],trn_cat[:50],trn_vect[:50]
 
 ############ Store original data if predicting ###########
 if args.predict:
+        orgn_trn_data,orgn_trn_cat,orgn_trn_vect = [],[],[]#trn_data.copy(),trn_cat.copy(),trn_vect.copy()
+
+print(args.model)
+if args.model == 'transformer':
+        dataset = PathologicalGamblingDataset(os.path.join(os.getcwd(),args.train_loc),args.fpath,args)
+        trn_data,trn_cat,trn_vect= dataset.get_data()
         orgn_trn_data,orgn_trn_cat,orgn_trn_vect = trn_data.copy(),trn_cat.copy(),trn_vect.copy()
-
-
 
 ############### Choosing Model and Model Parameters ##################
 option = args.model
@@ -183,7 +197,27 @@ if args.predict:
                 if tmp['score']>=0.75:
                         tmp['decision']=int(predicted_class_labels[i])
                 tst_results.append(tmp)
-        with open('submissions/'+output_file, 'w', encoding='utf-8') as fl:
+        if 'tfidf' in output_file:
+                output_file = 'tfidf_rf.json'
+        elif 'transformer' in output_file:
+                output_file = 'transformer.json'
+        elif '1000' in output_file:
+                output_file = 'entropy_rf_subreddit.json'
+        elif 'rf_500' in output_file:
+                output_file = 'entropy_rf.json'
+        else:
+                output_file = 'entropy_ab_mb.json'
+       
+        orgnDir = os.getcwd()
+        os.chdir('Submissions')
+        
+        stages=glob.glob('*')
+        stage = max(stages,key=extract_number)
+        stageId = int(stage.split('Stage')[-1])
+
+
+        with open(f'{stage}/submissions/'+output_file, 'w', encoding='utf-8') as fl:
                 json.dump(tst_results, fl, ensure_ascii=False, indent=4)
 
         print('\n !!!!! Submission file with the test data class labels is ready !!!!! \n')   
+        os.chdir(orgnDir)

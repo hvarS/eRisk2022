@@ -100,8 +100,8 @@ def bert_training_model(trn_data,trn_cat,test_size=0.2,max_length=512,model_name
         #     trainer.train(resume_from_checkpoint = True)
         # else:
         #     trainer.train()
-        print('\n Trainer train done \n')        
-        print('\n save model \n')
+        # print('\n Trainer train done \n')        
+        # print('\n save model \n')
 
         parts = model_name.split('/')
         model_name = '_'.join(parts)    

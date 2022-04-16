@@ -89,7 +89,7 @@ def no_pipeline_entropy(trn_data,trn_cat,valid_data,trn_features,valid_features,
     if not os.path.exists(model_path):
         os.mkdir(model_path)
     os.chdir(model_path)
-    flname='entropy'+'_'+clf_opt+str(no_of_selected_features)
+    flname='entropy'+'_'+clf_opt+'_'+str(no_of_selected_features)
     joblib.dump(clf, flname+'_clf.joblib')
     joblib.dump(trn_model, flname+'_model.joblib')
     joblib.dump(trn_dct, flname+'_dict.joblib')

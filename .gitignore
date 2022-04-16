@@ -20,3 +20,4 @@ predictions
 pymm
 training.pkl
 saved_datasets
+Submissions/*
