@@ -9,7 +9,7 @@ def extract_number(f):
     s = re.findall("\d+$",f)
     return (int(s[0]) if s else -1,f)
 
-for _ in range(100):
+for _ in range(200):
     orgnDir = os.getcwd()
     os.chdir('Submissions')
 

@@ -13,6 +13,7 @@ TransformerResults
 transformerLogs
 training.csv
 trial.ipynb
+log.out
 predictions
 *term_document_matrix*.csv
 RedditExtract/*.csv
