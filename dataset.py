@@ -7,13 +7,15 @@ from tqdm import tqdm
 import sys
 import glob
 import csv
+import numpy as np
 
 task1_loc = 'task1_data'
 task1_training_loc = 't1_training/TRAINING_DATA/2021_cases'
 task2_loc = 'task2_data'
 task2_training_loc = 't2_training/TRAINING_DATA'
 task3_loc = 'task3_data'
-task3_training_loc = 't3_training/TRAINING_DATA'
+task3_training_loc = 'test_data'
+task3_testing_loc = ''
 
 class PathologicalGamblingDataset(object):
     def __init__(self,path,fpath,args):
@@ -271,5 +273,56 @@ class AnorexiaDataset(object):
         # trn_data = [x[0] for _,x in trn_dict.items()]
         # trn_cat = [x[1] for _,x in trn_dict.items()]
         return trn_data, trn_cat,[]
+
+import pandas as pd
+
+class Task3Dataset(object):
+    def __init__(self,path,fpath):
+        super(Task3Dataset,self).__init__()
+        self.path = path
+        self.fpath = fpath
+        self.test_data=self.get_data()
+    
+
+    def get_data(self):
+        print('\n ***** Reading Test Data ***** \n')
+
+        loc = os.path.join(self.path,self.fpath,task3_training_loc)
+        data_dict = {}
+        files=glob.glob(loc+'/*')
+        print(len(files))
+        i = 0
+        for file in tqdm(files):
+            # row = {}
+            csv = pd.read_xml(file)
+                # print(csv.keys())
+                # print(csv)
+                # file = open(file,'rb')
+                # tree = ET.parse(file, parser = ET.XMLParser(encoding = 'utf-8-sig'))
+
+            
+            idn = csv['ID'][0]
+            titles = csv['TITLE'][1:]
+            texts = csv['TEXT'][1:]
+            titles = titles.replace(np.nan, '', regex=True)
+            texts = texts.replace(np.nan,'',regex = True)
+            texts = titles+" "+texts
+
+            all_text = ''
+            for text in texts:
+                text=text.strip(' ').strip('\n')
+                text=text.replace('Repost','')
+                text=re.sub(r'\n', ' ', text)
+                text=re.sub(r'r/', '', text)
+                text=re.sub(r'([\s])([A-Z])([a-z0-9\s]+)', r'. \2\3', text)      
+                text = re.sub(r'[^!"#$%&\'()*+,-./:;<=>?@[\]^_`{|}~\n\w]+',' ', text)     # Remove special characters e.g., emoticons.
+                all_text+=text 
+            all_text=re.sub(r'\\', r'', all_text)
+            all_text=re.sub(r'[\s]+', ' ', all_text)                    
+            all_text=re.sub(r'([,;.]+)([\s]*)([.])', r'\3', all_text)
+            all_text=re.sub(r'([?!])([\s]*)([.])', r'\1', all_text)                      
+            # row['text'] = all_text
+            data_dict[idn] = all_text
+        return data_dict
     
 
