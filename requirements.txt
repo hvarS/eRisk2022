@@ -1,0 +1,14 @@
+gensim==4.2.0
+joblib==1.1.0
+matplotlib==3.5.3
+nltk==3.7
+numpy==1.22.3
+pandas==1.4.2
+praw==7.6.0
+pymm==0.1
+scikit_learn==1.1.2
+seaborn==0.11.2
+sentence_transformers==2.0.0
+torch==1.9.0+cu111
+tqdm==4.56.0
+transformers==4.6.1

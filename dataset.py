@@ -9,10 +9,10 @@ import glob
 import csv
 import numpy as np
 
-task1_loc = 'task1_data'
-task1_training_loc = 't1_training/TRAINING_DATA/2021_cases'
+task1_loc = 'task1'
+task1_training_loc = 'training'
 task2_loc = 'task2_data'
-task2_training_loc = 't2_training/TRAINING_DATA'
+task2_training_loc = 'training'
 task3_loc = 'task3_data'
 task3_training_loc = 'test_data'
 task3_testing_loc = ''
