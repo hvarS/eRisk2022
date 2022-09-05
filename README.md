@@ -38,10 +38,12 @@ The following options of 'clf_opt' are available and the `default` is `s`:
 
         's' for Support Vector Machine 
 
-
+If you find our work useful, please cite using this:
+```
 @inproceedings{Srivastava2022NLPIISERBeRisk2022ET,
   title={NLP-IISERB@eRisk2022: Exploring the Potential of Bag of Words, Document Embeddings and Transformer Based Framework for Early Prediction of Eating Disorder, Depression and Pathological Gambling Over Social Media},
   author={Harshvardhan Srivastava and S LijinN. and S Sruthi and Tanmay Basu},
   booktitle={CLEF},
   year={2022}
 }
+```
